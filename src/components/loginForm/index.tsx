@@ -38,33 +38,6 @@ export default function LoginForm(): JSX.Element {
     .catch(() => {
       setUsernameErrorMessage('Usuário ou senha inválidos');
     })
-
-    if(refreshToken) {
-      axios({
-        method: 'POST',
-        url: 'http://127.0.0.1:8000/api/token/refresh/',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: {
-          refresh: JSON.parse(refreshToken)
-        }
-      })
-      .then(response => {
-        axios({
-          method: 'POST',
-          url: 'http://127.0.0.1:8000/api/token/verify/',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          data: {
-            token: response.data.access
-          }
-        })
-        .then(() => alert('logado com sucesso'))
-        .catch(() => alert('credenciais inválidas'))
-      });
-    }
   }
 
   return (

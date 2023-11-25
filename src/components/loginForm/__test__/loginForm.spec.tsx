@@ -68,8 +68,4 @@ describe('<LoginForm />', () => {
 
     await screen.findByText(/usuário ou senha inválidos/i);
   })
-
-  it('should access the admin page', () => {
-
-  })
 });
