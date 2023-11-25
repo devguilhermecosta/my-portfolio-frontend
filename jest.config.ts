@@ -7,7 +7,10 @@ const config: Config = {
    collectCoverageFrom: [
       '<rootDir>/src/**/*.{js, ts, jsx, tsx}'
    ],
-   resetMocks: false
+   resetMocks: false,
+   moduleNameMapper: { 
+      '\\.css$': '<rootDir>/emptyModule.js',
+    },
 };
 
 
