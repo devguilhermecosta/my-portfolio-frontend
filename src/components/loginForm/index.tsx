@@ -8,32 +8,29 @@ export default function LoginForm(): JSX.Element {
   const [password, setPassword] = useState('');
   const [usernameErrorMessage, setUsernameErrorMessage] = useState('');
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
-  const [refreshToken, setRefreshToken] = useState('');
+
+  const fieldsAreValid = (): boolean => {
+    setUsernameErrorMessage(username ? '' : 'Campo obrigatório');
+    setPasswordErrorMessage(password ? '' : 'Campo obrigatório');
+
+    if (!username || !password) return false;
+
+    return true
+  };
 
   async function handleForm(event: FormEvent) {
     event.preventDefault();
 
-    setUsernameErrorMessage(username ? '' : 'Campo obrigatório');
-    setPasswordErrorMessage(password ? '' : 'Campo obrigatório');
-
-    if (!username || !password) return;
+    if (!fieldsAreValid()) return;
 
     const url = 'http://127.0.0.1:8000/api/token/'
    
-    axios({
-      method: 'POST',
-      url: url,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: {
-        username: username,
-        password: password
-      }
+    axios.post(url, {
+      username: username,
+      password: password,
     })
     .then(response => {
       localStorage.setItem('tokenRefresh', JSON.stringify(response.data.refresh));
-      setRefreshToken(JSON.stringify(response.data.refresh));
     })
     .catch(() => {
       setUsernameErrorMessage('Usuário ou senha inválidos');
@@ -59,7 +56,9 @@ export default function LoginForm(): JSX.Element {
             onChange={(e) => {setUsername(e.target.value)}}
             />
           {usernameErrorMessage && (
-            <p style={{ color: 'darkred' }}>{usernameErrorMessage}</p>
+            <p style={{ color: 'darkred' }}>
+              {usernameErrorMessage}
+            </p>
           )}
         </div>
         <div>
@@ -73,7 +72,9 @@ export default function LoginForm(): JSX.Element {
             onChange={(e) => {setPassword(e.target.value)}}
             />
           {passwordErrorMessage && (
-            <p style={{ color: 'darkred' }}>{passwordErrorMessage}</p>
+            <p style={{ color: 'darkred' }}>
+              {passwordErrorMessage}
+            </p>
           )}
         </div>
         <input type="submit" id="submit" value="sign in" className="Login-form__submit"/>

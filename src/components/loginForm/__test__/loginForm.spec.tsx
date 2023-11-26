@@ -1,11 +1,12 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import { userEvent } from '@testing-library/user-event';
 import LoginForm from '..';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
-const axiosMock = new MockAdapter(axios);
-
 describe('<LoginForm />', () => {
+  const axiosMock = new MockAdapter(axios);
+
   it('should render the form element', () => {
     const form = render(<LoginForm />);
     const formElement = form.container.querySelector('#login_form');
@@ -56,10 +57,9 @@ describe('<LoginForm />', () => {
 
     render(<LoginForm />);
 
+    // mock input data
     const usernameInput = screen.getByLabelText(/username/i);
     const passwordInput = screen.getByLabelText(/password/i);
-  
-    // mock input data
     fireEvent.change(usernameInput, {target: {value: 'test'}});
     fireEvent.change(passwordInput, {target: {value: 'test'}});
 
@@ -68,4 +68,29 @@ describe('<LoginForm />', () => {
 
     await screen.findByText(/usuário ou senha inválidos/i);
   })
+
+  it('should save the token refresh in localStorage', async () => {
+    // mock response
+    axiosMock.onPost().reply(200, {
+      refresh: 'abcdef',
+      access: 'abcde'
+    });
+    
+    render(<LoginForm />);
+
+    // mock input data
+    const usernameInput = screen.getByLabelText(/username/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+    fireEvent.change(usernameInput, {target: {value: 'test'}});
+    fireEvent.change(passwordInput, {target: {value: 'test'}});
+
+    const button = screen.getByText(/sign in/i);
+  
+    // mock the localStorage
+    const mockSetItem = jest.spyOn(Storage.prototype, 'setItem');
+   
+    await userEvent.click(button);
+  
+    expect(mockSetItem).toHaveBeenCalledTimes(1);
+    })
 });
