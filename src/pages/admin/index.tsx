@@ -1,6 +1,6 @@
 import LoginForm from '../../components/loginForm';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { tokenRefreshVerify, tokenAccessVerify } from '../../utils/auth';
 import { Navigate } from 'react-router-dom';
 
 export default function Admin(): JSX.Element {
@@ -14,39 +14,33 @@ export default function Admin(): JSX.Element {
       return;
     }
 
-    async function tokenRefreshVerify() {
-      await axios.post('http://127.0.0.1:8000/api/token/refresh/', {
-        refresh: JSON.parse(tokenRefresh ? tokenRefresh : '')
-      })
-      .then((response) => setTokenAccess(response.data.access))
-      .catch(() => setIsAuthenticated(false))
-    }
-
-    tokenRefreshVerify();
+    tokenRefreshVerify(tokenRefresh)
+    .then((response) => {setTokenAccess(response.data.access)})
+    .catch(() => setIsAuthenticated(false))
 
   }, [tokenRefresh]);
 
   useEffect(() => {
-    async function tokenAccessVerify(): Promise<void> {
-      await axios.post('http://127.0.0.1:8000/api/token/verify/', {
-        token: tokenAccess
-      })
-      .then(() => setIsAuthenticated(true))
-      .catch(() => setIsAuthenticated(false))
+    if (!tokenAccess) {
+      setIsAuthenticated(false);
+      return;
     }
-
-    tokenAccessVerify();
-
+    
+    tokenAccessVerify(tokenAccess)
+    .then(() => setIsAuthenticated(true))
+    .catch(() => setIsAuthenticated(false))
+  
   }, [tokenAccess])
-
-
-  if (isAuthenticated) {
-    return <Navigate to={'/admin/dashboard'}/>
-  }
 
   // if the token is not valid or
   // token does not exists, render the login form
+  if (!isAuthenticated) {
+    return (
+      <LoginForm />
+    )
+  }
+
   return (
-    <LoginForm />
+    <Navigate to={'/admin/dashboard'}/>
   )
 }
