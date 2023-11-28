@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import LoginForm from '..';
+import LoginForm from '../../../components/loginForm';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
