@@ -6,7 +6,7 @@ import { useNavigate, Navigate } from 'react-router-dom';
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
-  const { handleLogin, userTokens } = useContext(AuthContext);
+  const { handleLogin, isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
 
   function handleSubmit(e: FormEvent<HTMLFormElement>): void {
@@ -31,7 +31,7 @@ export default function LoginPage() {
     )
   }
 
-  if (userTokens) {
+  if (isAuthenticated) {
     return (
       <Navigate to='/admin/dashboard' />
     )

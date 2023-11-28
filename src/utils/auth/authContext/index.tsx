@@ -3,6 +3,7 @@ import axios, { AxiosResponse } from 'axios';
 
 interface AuthContextData {
   userTokens: string | null;
+  isAuthenticated: boolean,
   handleLogin: (event: FormEvent<HTMLFormElement>) => Promise<AxiosResponse>;
 }
 
@@ -10,6 +11,7 @@ export const AuthContext = createContext({} as AuthContextData);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [userTokens, setUserTokens] = useState<string | null>(localStorage.getItem('userTokens'));
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const handleLogin = async function(event: FormEvent<HTMLFormElement>): Promise<AxiosResponse> {
     const url = 'http://127.0.0.1:8000/api/token/';
@@ -22,9 +24,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return new Promise(function(resolve, reject) {
       if (response.status !== 200) return reject('unauthorized');
     
-      const token = JSON.stringify(response.data);
-      localStorage.setItem( 'userTokens', token);
-      setUserTokens(token);
+      const tokenRefresh = JSON.stringify(response.data.refresh);
+      localStorage.setItem( 'userTokens', tokenRefresh);
+      setUserTokens(tokenRefresh);
+      setIsAuthenticated(true);
 
       return resolve(response);
     })
@@ -33,6 +36,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   return (
     <AuthContext.Provider value={{
       userTokens: userTokens,
+      isAuthenticated: isAuthenticated,
       handleLogin: handleLogin,
     }}>
       {children}

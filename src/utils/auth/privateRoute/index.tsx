@@ -10,7 +10,7 @@ interface PrivateProps {
 type RouterData = ReactNode
 
 export default function PrivateRoute({ children }: PrivateProps ): RouterData {
-  const { userTokens } = useContext(AuthContext);
+  const { isAuthenticated } = useContext(AuthContext);
 
-  return !userTokens ? <Navigate to='/admin/login'/> : children
+  return !isAuthenticated ? <Navigate to='/admin/login'/> : children
 }
