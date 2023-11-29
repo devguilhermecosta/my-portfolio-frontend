@@ -2,6 +2,7 @@ import { FormEvent, useContext, useState } from 'react';
 import { AuthContext } from '../../contexts/authContext';
 import MainContainer from '../../components/mainContainer';
 import './loginForm.css';
+import Loading from '../../components/loading';
 import { useNavigate, Navigate } from 'react-router-dom';
 
 export default function LoginPage() {
@@ -41,12 +42,6 @@ export default function LoginPage() {
     });
   }
 
-  if (loading) {
-    return (
-      <h1>loading...</h1>
-    )
-  }
-
   if (isAuthenticated) {
     return (
       <Navigate to='/admin/dashboard' />
@@ -55,6 +50,11 @@ export default function LoginPage() {
 
   return (
     <MainContainer>
+
+      {loading && (
+        <Loading />
+      )}
+
       <form 
         name='login_form' 
         id='login_form' 
