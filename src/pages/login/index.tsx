@@ -1,7 +1,7 @@
 import { FormEvent, useContext, useState } from 'react';
 import { AuthContext } from '../../contexts/authContext';
 import MainContainer from '../../components/mainContainer';
-import './loginForm.css';
+import Style from './login.module.css';
 import Loading from '../../components/loading';
 import { useNavigate, Navigate } from 'react-router-dom';
 
@@ -58,16 +58,16 @@ export default function LoginPage() {
       <form 
         name='login_form' 
         id='login_form' 
-        className="Login-form"
+        className={Style.Login_form}
         onSubmit={(e) => handleSubmit(e)}
         >
         <div>
-          <label htmlFor="username" className="Login-form__label">Username</label>
+          <label htmlFor="username" className={Style.Login_form__label}>Username</label>
           <input 
             type="text" 
             name="username" 
             id="username" 
-            className="Login-form__input"
+            className={Style.Login_form__input}
             value={username}
             onChange={(e) => {setUsername(e.target.value)}}
             />
@@ -76,12 +76,12 @@ export default function LoginPage() {
           )}
         </div>
         <div>
-          <label htmlFor="password" className="Login-form__label">Password</label>
+          <label htmlFor="password" className={Style.Login_form__label}>Password</label>
           <input 
             type="password" 
             name="password" 
             id="password" 
-            className="Login-form__input"
+            className={Style.Login_form__input}
             value={password}
             onChange={(e) => {setPassword(e.target.value)}}
             />
@@ -89,7 +89,7 @@ export default function LoginPage() {
             <p style={{ color: 'red' }}>{passwordError}</p>
           )}
         </div>
-        <input type="submit" id="submit" value="sign in" className="Login-form__submit"/>
+        <input type="submit" id="submit" value="sign in" className={Style.Login_form__submit}/>
       </form>
     </MainContainer>
   )

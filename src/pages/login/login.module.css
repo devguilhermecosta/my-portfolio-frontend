@@ -1,4 +1,4 @@
-.Login-form {
+.Login_form {
   width: 100%;
   max-width: 250px;
   display: flex;
@@ -9,13 +9,13 @@
   border-radius: 8px;
 }
 
-.Login-form__label {
+.Login_form__label {
   color: var(--secondaire-std);
   display: block;
   margin-bottom: 4px;
 }
 
-.Login-form__input {
+.Login_form__input {
   width:  100%;
   padding: 8px;
   border: none;
@@ -23,12 +23,12 @@
   color: var(--gray-std);
 }
 
-.Login-form__input:focus {
+.Login_form__input:focus {
   border: none;
   outline: none;
 }
 
-.Login-form__submit {
+.Login_form__submit {
   background-color: var(--contrast-std);
   color: var(--secondaire-std);
   border: none;
@@ -39,6 +39,6 @@
   transition: background 300ms ease;
 }
 
-.Login-form__submit:focus, .Login-form__submit:hover {
+.Login_form__submit:focus, .Login_form__submit:hover {
   background-color: var(--contrast-l1);
 }
