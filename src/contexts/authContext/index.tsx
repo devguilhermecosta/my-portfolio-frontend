@@ -73,7 +73,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
      * Renew the token access every 4 minutes.
      * If the token refresh is invalid, the user will be logged out.
      */
-    const REFRESH_INTERVAL = 1000 * 60 * 1 // 4 minutes
+    const REFRESH_INTERVAL = 1000 * 60 * 4 // 4 minutes
     const interval = setInterval(() => {
         if(userTokens){
             updateToken();
@@ -93,3 +93,5 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     </AuthContext.Provider>
   )
 }
+
+// TODO usar variáveis de ambiente para as urls e tempo de refresh.
