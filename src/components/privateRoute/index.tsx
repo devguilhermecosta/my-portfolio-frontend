@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { useContext } from "react";
-import { AuthContext } from "../authContext";
+import { AuthContext } from "../../contexts/authContext";
 import { Navigate } from "react-router-dom";
 
 interface PrivateProps {

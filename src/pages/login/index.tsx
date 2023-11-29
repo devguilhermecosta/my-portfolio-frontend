@@ -1,5 +1,5 @@
 import { FormEvent, useContext, useState } from 'react';
-import { AuthContext } from '../../utils/auth/authContext';
+import { AuthContext } from '../../contexts/authContext';
 import MainContainer from '../../components/mainContainer';
 import './loginForm.css';
 import { useNavigate, Navigate } from 'react-router-dom';

@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 
-const tokenRefreshVerify = async function(tokenRefresh: string): Promise<AxiosResponse> {
+const tokenRefreshVerify = async function(tokenRefresh: string | null): Promise<AxiosResponse> {
   const response = await axios.post('http://127.0.0.1:8000/api/token/refresh/', {
     refresh: JSON.parse(tokenRefresh ? tokenRefresh : '')
   });
