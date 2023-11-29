@@ -5,13 +5,29 @@ import './loginForm.css';
 import { useNavigate, Navigate } from 'react-router-dom';
 
 export default function LoginPage() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [usernameError, setUsernameError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const [loading, setLoading] = useState(false);
   const { handleLogin, isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  function validateFields(): boolean {
+    /**
+     * Checks if the fields are blank.
+     */
+    setUsernameError(!username ? 'Campo obrigatório' : '');
+    setPasswordError(!password ? 'Campo obrigatório' : '');
+
+    return !username || !password ? false : true
+  }
+
   function handleSubmit(e: FormEvent<HTMLFormElement>): void {
     e.preventDefault();
   
+    if (!validateFields()) return;
+    
     setLoading(true);
 
     handleLogin(e)
@@ -21,7 +37,7 @@ export default function LoginPage() {
     })
     .catch(() => {
       setLoading(false);
-      alert('usuário ou senha inválidos');
+      setUsernameError('Usuário ou senha inválidos');
     });
   }
 
@@ -52,7 +68,12 @@ export default function LoginPage() {
             name="username" 
             id="username" 
             className="Login-form__input"
+            value={username}
+            onChange={(e) => {setUsername(e.target.value)}}
             />
+          {usernameError && (
+            <p style={{ color: 'red' }}>{usernameError}</p>
+          )}
         </div>
         <div>
           <label htmlFor="password" className="Login-form__label">Password</label>
@@ -61,7 +82,12 @@ export default function LoginPage() {
             name="password" 
             id="password" 
             className="Login-form__input"
+            value={password}
+            onChange={(e) => {setPassword(e.target.value)}}
             />
+          {passwordError && (
+            <p style={{ color: 'red' }}>{passwordError}</p>
+          )}
         </div>
         <input type="submit" id="submit" value="sign in" className="Login-form__submit"/>
       </form>
