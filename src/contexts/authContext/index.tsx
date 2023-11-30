@@ -1,11 +1,11 @@
 import { FormEvent, ReactNode, createContext, useCallback, useEffect, useState } from 'react';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import { tokenRefreshVerify } from '../../utils/auth';
 
 interface AuthContextData {
   userTokens: string | null;
   isAuthenticated: string | null,
-  handleLogin: (event: FormEvent<HTMLFormElement>) => Promise<AxiosResponse>;
+  handleLogin: (event: FormEvent<HTMLFormElement>) => Promise<void>;
   handleLogout: () => void;
 }
 
@@ -15,7 +15,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [userTokens, setUserTokens] = useState<string | null>(localStorage.getItem('userTokens'));
   const [isAuthenticated, setIsAuthenticated] = useState<string | null>(localStorage.getItem('userTokens'));
 
-  const handleLogin = async function(event: FormEvent<HTMLFormElement>): Promise<AxiosResponse> {
+  async function handleLogin(event: FormEvent<HTMLFormElement>) {
     /**
      * Authenticate the user.
      * if username and password are corrects, the token refresh is stored on localStorage and
@@ -23,22 +23,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
      */
     const url = 'http://127.0.0.1:8000/api/token/';
 
-    const response = await axios.post(url, {
+    await axios.post(url, {
       username: event.currentTarget.username.value,
       password: event.currentTarget.password.value,
-    });
-
-    return new Promise(function(resolve, reject) {
-      if (response.status !== 200) return reject('unauthorized');
-    
+    })
+    .then(response => {
       const tokenRefresh = JSON.stringify(response.data.refresh);
       const tokenAccess = JSON.stringify(response.data.access);
-
+  
       localStorage.setItem('userTokens', tokenRefresh);
       setUserTokens(tokenRefresh);
       setIsAuthenticated(tokenAccess);
-
-      return resolve(response);
+    })
+    .catch(() => {
+      setUserTokens(null);
+      setIsAuthenticated(null);
     })
   }
 

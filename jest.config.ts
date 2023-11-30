@@ -2,7 +2,7 @@ import type {Config} from 'jest';
 
 const config: Config = {
    verbose: true,
-   testEnvironment: 'jest-environment-jsdom',
+   testEnvironment: './jest.environment.js',
    setupFilesAfterEnv: ['<rootDir>/jest-setup.ts'],
    moduleNameMapper: {
       '\\.css$': '<rootDir>/emptyModule.js',
@@ -10,6 +10,9 @@ const config: Config = {
    collectCoverageFrom: [
       '<rootDir>/src/**/*.{js, ts, jsx, tsx}'
    ],
+   testEnvironmentOptions: {
+      customExportConditions: [''],
+   },
    resetMocks: false
 };
 
