@@ -24,23 +24,22 @@ export default function LoginPage() {
     return !username || !password ? false : true
   }
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: FormEvent<HTMLFormElement>): void {
     e.preventDefault();
   
     if (!validateFields()) return;
     
     setLoading(true);
 
-    await handleLogin(e);
-
-    if (!isAuthenticated) {
+    handleLogin(e)
+    .then(() => {
+      navigate('/admin/dashboard', { replace: true });
+      setLoading(true);
+    })
+    .catch(() => {
       setLoading(false);
       setUsernameError('Usuário ou senha inválidos');
-      return
-    }
-
-    navigate('/admin/dashboard', { replace: true });
-    setLoading(true);
+    });
   }
 
   if (isAuthenticated) {

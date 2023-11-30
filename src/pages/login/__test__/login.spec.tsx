@@ -5,9 +5,10 @@ import { userEvent } from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import 'axios';
+import '../../../contexts/authContext'
  
 const handlers = [
-  http.post('/api/token/', () => {
+  http.post('http://127.0.0.1:8000/api/token/', () => {
     return new HttpResponse(null, { status: 401 })
   }),
 ]
@@ -25,10 +26,9 @@ function renderLoginPage() {
 }
 
 describe('<loginPage />', () => {
-  beforeEach(() => {
-    server.listen()
-    console.log('intercepting...')
-  })
+  beforeAll(() => server.listen());
+  afterEach(() => server.resetHandlers());
+  afterAll(() => server.close());
 
   it('should render the correct content', async () => {
     renderLoginPage();
