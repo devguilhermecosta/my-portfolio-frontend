@@ -4,6 +4,7 @@ import MainContainer from '../../components/mainContainer';
 import Style from './login.module.css';
 import Loading from '../../components/loading';
 import { useNavigate, Navigate } from 'react-router-dom';
+import axios from 'axios';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
@@ -11,7 +12,7 @@ export default function LoginPage() {
   const [usernameError, setUsernameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { handleLogin, isAuthenticated } = useContext(AuthContext);
+  const { userAuthentication, isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
 
   function validateFields(): boolean {
@@ -24,22 +25,26 @@ export default function LoginPage() {
     return !username || !password ? false : true
   }
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>): void {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>): Promise<void> {
     e.preventDefault();
   
     if (!validateFields()) return;
     
     setLoading(true);
 
-    handleLogin(e)
-    .then(() => {
+    await axios.post('http://127.0.0.1:8000/api/token/', {
+      username: username,
+      password: password,
+    })
+    .then(response => {
+      userAuthentication(response.data);
       navigate('/admin/dashboard', { replace: true });
       setLoading(true);
     })
     .catch(() => {
       setLoading(false);
       setUsernameError('Usuário ou senha inválidos');
-    });
+    })
   }
 
   if (isAuthenticated) {
