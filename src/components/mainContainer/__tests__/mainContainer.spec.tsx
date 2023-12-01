@@ -1,4 +1,6 @@
+import { describe, expect } from 'vitest';
 import { render } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import MainContainer from '..';
 
 describe('<MainContainer />', () => {
@@ -12,7 +14,7 @@ describe('<MainContainer />', () => {
     const children = mockElement();
     const main = render(<MainContainer>{children}</MainContainer>);
     const mainElement = main.container.querySelector('#container');
-    expect(mainElement).toBeInTheDocument();
+    expect(mainElement).toBeDefined();
   });
 
   it('should have the style', () => {

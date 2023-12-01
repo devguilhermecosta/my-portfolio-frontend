@@ -1,12 +1,14 @@
+import '@testing-library/jest-dom';
+import { describe, it, vi, expect } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { userEvent } from '@testing-library/user-event';
 import LoginPage from '..';
 import { BrowserRouter } from 'react-router-dom';
-import { userEvent } from '@testing-library/user-event';
 import { AuthProvider } from '../../../contexts/authContext';
 import { server } from '../../../utils/mocks/node';
 import { http, HttpResponse } from 'msw';
 
- 
+
 function renderLoginPage() {
   return (
     render(
@@ -42,7 +44,7 @@ describe('<loginPage />', () => {
   });
 
   it('should render username or password is invalid', async () => {
-    server.use(http.post('/api/token', () => {
+    server.use(http.post('http://127.0.0.1:8000/api/token/', () => {
       return new HttpResponse(null, { status: 401 });
     }));
 
@@ -61,14 +63,14 @@ describe('<loginPage />', () => {
   });
 
   it('should authenticate the user', async () => {
-    server.use(http.post('http://127.0.0.1:8000/api/token/', async () => {
+    server.use(http.post('http://127.0.0.1:8000/api/token/', () => {
       return HttpResponse.json({
         data: {
-          refresh: 'abcde',
-          access: 'abcde'
+          refresh: 'abc',
+          access: 'abc'
         }
       }, { status: 200 })
-    }))
+    }));
 
     renderLoginPage();
 
@@ -77,11 +79,13 @@ describe('<loginPage />', () => {
     fireEvent.change(usernameInput, { target: { value: 'test' } });
     fireEvent.change(passwordInput, { target: { value: 'test' } });
 
-    const spy = jest.spyOn(Storage.prototype, 'setItem');
+    const spy = vi.spyOn(Storage.prototype, 'setItem');
 
     const button = screen.getByText(/sign in/i);
 
     await userEvent.click(button);
+
+    await screen.findByText(/loading/i);
 
     expect(spy).toHaveBeenCalled();
   })
