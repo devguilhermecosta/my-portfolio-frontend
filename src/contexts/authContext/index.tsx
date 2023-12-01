@@ -12,8 +12,9 @@ interface AuthContextData {
 export const AuthContext = createContext({} as AuthContextData);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [userTokens, setUserTokens] = useState<string | null>(localStorage.getItem('userTokens'));
-  const [user, setUser] = useState<string | null>(localStorage.getItem('userTokens'));
+  const [userTokens, setUserTokens] = useState<string | null>(() => (localStorage.getItem('userTokens') ? localStorage.getItem('userTokens') : null));
+  const [user, setUser] = useState<string | null>(() => (localStorage.getItem('userTokens') ? localStorage.getItem('userTokens') : null));
+  const [loading, setLoading] = useState(true);
 
 
   const handleLogin = async function(event: FormEvent<HTMLFormElement>): Promise<AxiosResponse> {
@@ -56,14 +57,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(response.data.access);
       })
       .catch(() => {
-        setUser(null);
         handleLogout();
+      })
+      .finally(() => {
+        if (loading) setLoading(false);
       })
     }
 
     handleUpdateToken();
 
-  }, [userTokens])
+  }, [loading, userTokens])
+
+  /**
+   * tries update existing token on the first render
+   */
+  useEffect(()=>{
+    if(loading){
+        updateToken()
+    }
+  },[userTokens, loading, user, updateToken])
 
   /**
    * Renew the token access every 4 minutes.
