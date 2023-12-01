@@ -33,7 +33,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const tokenAccess = response.data.access;
 
       localStorage.setItem('userTokens', tokenRefresh);
-      setUserTokens(tokenAccess);
+      setUserTokens(tokenRefresh);
       setUser(tokenAccess);
 
       resolve(response.data);
