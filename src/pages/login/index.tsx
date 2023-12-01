@@ -4,7 +4,6 @@ import MainContainer from '../../components/mainContainer';
 import Style from './login.module.css';
 import Loading from '../../components/loading';
 import { useNavigate, Navigate } from 'react-router-dom';
-import axios from 'axios';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
@@ -12,13 +11,13 @@ export default function LoginPage() {
   const [usernameError, setUsernameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { userAuthentication, isAuthenticated } = useContext(AuthContext);
+  const { handleLogin, user } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  /**
+   * Checks if the fields are blank.
+  */
   function validateFields(): boolean {
-    /**
-     * Checks if the fields are blank.
-     */
     setUsernameError(!username ? 'Campo obrigatório' : '');
     setPasswordError(!password ? 'Campo obrigatório' : '');
 
@@ -32,12 +31,8 @@ export default function LoginPage() {
     
     setLoading(true);
 
-    await axios.post('http://127.0.0.1:8000/api/token/', {
-      username: username,
-      password: password,
-    })
-    .then(response => {
-      userAuthentication(response.data);
+    await handleLogin(e)
+    .then(() => {
       navigate('/admin/dashboard', { replace: true });
       setLoading(true);
     })
@@ -47,7 +42,7 @@ export default function LoginPage() {
     })
   }
 
-  if (isAuthenticated) {
+  if (user) {
     return (
       <Navigate to='/admin/dashboard' />
     )

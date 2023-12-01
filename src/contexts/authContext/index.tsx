@@ -1,34 +1,47 @@
-import { ReactNode, createContext, useCallback, useEffect, useState } from 'react';
+import { FormEvent, ReactNode, createContext, useCallback, useEffect, useState } from 'react';
 import { tokenRefreshVerify } from '../../utils/auth';
+import axios, { AxiosResponse } from 'axios';
 
 interface AuthContextData {
   userTokens: string | null;
-  isAuthenticated: string | null,
-  userAuthentication: (data: ResponseDataProps) => void;
+  user: string | null,
+  handleLogin: (event: FormEvent<HTMLFormElement>) => Promise<AxiosResponse>;
   handleLogout: () => void;
-}
-
-interface ResponseDataProps {
-  refresh: string;
-  access: string;
 }
 
 export const AuthContext = createContext({} as AuthContextData);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [userTokens, setUserTokens] = useState<string | null>(localStorage.getItem('userTokens'));
-  const [isAuthenticated, setIsAuthenticated] = useState<string | null>(localStorage.getItem('userTokens'));
+  const [user, setUser] = useState<string | null>(localStorage.getItem('userTokens'));
 
-  function userAuthentication(data: ResponseDataProps) {
-    const tokenRefresh = data.refresh;
-    const tokenAccess = data.access;
+  const handleLogin = async function(event: FormEvent<HTMLFormElement>): Promise<AxiosResponse> {
+
+    const formData = new FormData(event.currentTarget);
+    
+    const url = 'http://127.0.0.1:8000/api/token/';
+
+    const response = await axios.post(url, {
+      username: formData.get('username'),
+      password: formData.get('password')
+    });
+
+  return new Promise(function(resolve, reject) {
+    if (response.status !== 200) reject('unauthorized');
+
+    const tokenRefresh = response.data.refresh;
+    const tokenAccess = response.data.access;
+
     localStorage.setItem('userTokens', tokenRefresh);
-    setUserTokens(tokenRefresh);
-    setIsAuthenticated(tokenAccess);
+    setUserTokens(tokenAccess);
+    setUser(tokenAccess);
+
+    resolve(response.data);
+  })
   }
 
   const handleLogout = (): void => {
-    setIsAuthenticated(null);
+    setUser(null);
     setUserTokens(null);
     localStorage.removeItem('userTokens');
   }
@@ -41,10 +54,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     function handleUpdateToken(): void {
       tokenRefreshVerify(userTokens)
       .then(response => {
-        setIsAuthenticated(response.data.access);
+        setUser(response.data.access);
       })
       .catch(() => {
-        setIsAuthenticated(null);
+        setUser(null);
         handleLogout();
       })
     }
@@ -70,8 +83,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   return (
     <AuthContext.Provider value={{
       userTokens: userTokens,
-      isAuthenticated: isAuthenticated,
-      userAuthentication: userAuthentication,
+      user: user,
+      handleLogin: handleLogin,
       handleLogout: handleLogout,
     }}>
       {children}
