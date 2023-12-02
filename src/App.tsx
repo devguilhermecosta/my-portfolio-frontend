@@ -1,5 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom';
-import Dashboard from './pages/admin';
+import Dashboard from './pages/dashboard';
 import LoginPage from './pages/login';
 import Networks from './pages/networks';
 import Works from './pages/works';
