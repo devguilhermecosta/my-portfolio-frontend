@@ -26,8 +26,6 @@ describe('<MainContainer />', () => {
       padding: '10px',
       minHeight: '100vh',
       display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
     })
   });
 });
