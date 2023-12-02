@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
-import { describe, it, vi, expect } from 'vitest';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import LoginPage from '..';
 import { BrowserRouter } from 'react-router-dom';
@@ -30,7 +30,6 @@ describe('<loginPage />', () => {
     await screen.findByLabelText(/username/i);  // input
     await screen.findByLabelText(/password/i);  // input
     await screen.findByText(/sign in/i);        // input submit
-
   });
 
   it('should render error message if any field is blank', async () => {
@@ -44,9 +43,16 @@ describe('<loginPage />', () => {
   });
 
   it('should render username or password is invalid', async () => {
-    server.use(http.post('http://127.0.0.1:8000/api/token/', () => {
-      return new HttpResponse(null, { status: 401 });
-    }));
+    const handlers = [
+      http.post('http://127.0.0.1:8000/api/token/', () => {
+        return new HttpResponse(null, { status: 401 });
+      }),
+      http.post('http://127.0.0.1:8000/api/token/refresh/', () => {
+        return new HttpResponse(null, { status: 401 })
+      }),
+    ]
+
+    server.use(...handlers);
 
     renderLoginPage();
 
@@ -60,17 +66,31 @@ describe('<loginPage />', () => {
     await userEvent.click(button);
 
     await screen.findByText(/usuário ou senha inválidos/i);
+
+    // the /admin/dashboard route should not be called
+    await waitFor(() => expect(window.location.href).not.toContain('/admin/dashboard'))
   });
 
   it('should authenticate the user', async () => {
-    server.use(http.post('http://127.0.0.1:8000/api/token/', () => {
-      return HttpResponse.json({
-        data: {
-          refresh: 'abc',
-          access: 'abc'
-        }
-      }, { status: 200 })
-    }));
+    const handlers = [
+      http.post('http://127.0.0.1:8000/api/token/', () => {
+        return HttpResponse.json({
+          data: {
+            refresh: 'abc',
+            access: 'abc'
+          }
+        }, { status: 200 })
+      }),
+      http.post('http://127.0.0.1:8000/api/token/refresh/', () => {
+        return HttpResponse.json({
+          data: {
+            access: 'abc'
+          }
+        }, { status: 401 })
+      }),
+    ]
+
+    server.use(...handlers);
 
     renderLoginPage();
 
@@ -79,14 +99,11 @@ describe('<loginPage />', () => {
     fireEvent.change(usernameInput, { target: { value: 'test' } });
     fireEvent.change(passwordInput, { target: { value: 'test' } });
 
-    const spy = vi.spyOn(Storage.prototype, 'setItem');
-
     const button = screen.getByText(/sign in/i);
 
     await userEvent.click(button);
 
-    await screen.findByText(/loading/i);
-
-    expect(spy).toHaveBeenCalled();
+    // the /admin/dashboard route should be called
+    await waitFor(() => expect(window.location.href).toContain('/admin/dashboard'))
   })
 })
