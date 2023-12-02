@@ -1,9 +1,12 @@
 import { StyledMain } from "./syled";
 import { ReactNode } from "react";
+import React from "react";
 
-export default function MainContainer({ children }: { children: ReactNode }): JSX.Element {
+type IntrinsicAttributes = React.CSSProperties;
+
+export default function MainContainer({ children, ...props }: IntrinsicAttributes & { children: ReactNode; }): JSX.Element {
   return (
-    <StyledMain id='container'>
+    <StyledMain id='container' style={{ ...props }}>
       { children }
     </StyledMain>
   )
