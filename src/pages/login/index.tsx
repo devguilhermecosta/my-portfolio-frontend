@@ -49,8 +49,7 @@ export default function LoginPage() {
   }
 
   return (
-    <MainContainer>
-
+    <MainContainer justifyContent='center'>
       {loading && (
         <Loading />
       )}

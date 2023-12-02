@@ -11,7 +11,7 @@ export default function Dashboard(): JSX.Element {
   const navigate = useNavigate();
 
   return (
-    <MainContainer justifyContent='flex-start' flexDirection='column'>
+    <MainContainer>
       {loading && (
         <Loading />
       )}
