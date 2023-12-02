@@ -1,0 +1,32 @@
+.C_dashboard {
+  text-align: center;
+  color: var(--secondaire-l1);
+}
+
+.C_dashboard > h1 {
+  text-transform: capitalize;
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+
+.C_dashboard_button,
+.C_dashboard_button_logout {
+  width: 100%;
+  max-width: 200px;
+  margin: 10px 0;
+  padding: 10px 5px;
+  border-radius: 4px;
+  border: none;
+  outline: none;
+  background-color: var(--contrast-l1);
+  color: var(--secondaire-l1);
+  cursor: pointer;
+}
+
+.C_dashboard_button {
+  text-transform: capitalize;
+}
+
+.C_dashboard_button_logout {
+  opacity: .6;
+}
