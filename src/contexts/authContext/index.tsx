@@ -52,16 +52,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
    */
   const updateToken = useCallback(() => {
     function handleUpdateToken(): void {
-      tokenRefreshVerify(userTokens)
-      .then(response => {
-        setUser(response.data.access);
-      })
-      .catch(() => {
-        handleLogout();
-      })
-      .finally(() => {
-        if (loading) setLoading(false);
-      })
+      if (userTokens) {
+        tokenRefreshVerify(userTokens)
+        .then(response => {
+          setUser(response.data.access);
+        })
+        .catch(() => {
+          handleLogout();
+        })
+        .finally(() => {
+          if (loading) setLoading(false);
+        })
+      }
     }
 
     handleUpdateToken();
