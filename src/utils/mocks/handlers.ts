@@ -19,5 +19,11 @@ export const handlers = [
         phone: "46999083251",
         whatsapp: "https://whatsapp.com",
     }, { status: 200 });
-  })
+  }),
+  http.post('http://127.0.0.1:8000/networks/api/v1/', () => {
+    return new HttpResponse('any');
+  }),
+  http.patch('http://127.0.0.1:8000/networks/api/v1/', () => {
+    return new HttpResponse('any');
+  }),
 ]
