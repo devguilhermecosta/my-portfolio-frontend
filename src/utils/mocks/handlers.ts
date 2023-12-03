@@ -1,4 +1,5 @@
 import { http, HttpResponse } from 'msw';
+import { workList } from './worksList';
 
 export const handlers = [
   http.post('http://127.0.0.1:8000/api/token/', () => {
@@ -26,4 +27,7 @@ export const handlers = [
   http.patch('http://127.0.0.1:8000/networks/api/v1/', () => {
     return new HttpResponse('any');
   }),
+  http.get('http://127.0.0.1:8000/work/api/list/', () => {
+    return HttpResponse.json(workList , { status: 200 })
+  })
 ]
