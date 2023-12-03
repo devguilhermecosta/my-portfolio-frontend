@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const StyledMain = styled.main`
   background-color: #040C0C;
   color: var(--secondaire-l1);
-  padding: 10px;
+  padding: 50px 10px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;

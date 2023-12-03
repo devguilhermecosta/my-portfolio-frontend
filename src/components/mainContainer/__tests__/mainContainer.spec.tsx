@@ -23,7 +23,7 @@ describe('<MainContainer />', () => {
     const mainElement = main.container.querySelector('#container');
     expect(mainElement).toHaveStyle({
       backgroundColor: '#040C0C',
-      padding: '10px',
+      padding: '50px 10px',
       minHeight: '100vh',
       display: 'flex',
     })
