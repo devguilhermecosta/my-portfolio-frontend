@@ -12,6 +12,9 @@ export const handlers = [
   http.post(`${baseUrl}/api/token/verify/`, () => {
     return new HttpResponse('any');
   }),
+  http.post(`${baseUrl}/networks/api/v1/`, () => {
+    return new HttpResponse(null, { status: 201 })
+  }),
   http.get(`${baseUrl}/networks/api/v1/`, () => {
     return HttpResponse.json({
         email: "guilherme@email.com",
