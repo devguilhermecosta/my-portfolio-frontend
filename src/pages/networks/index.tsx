@@ -6,14 +6,15 @@ import { AuthContext } from "../../contexts/authContext";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import BackButton from "../../components/backButton";
+import SubmitInput from "../../components/submitInput";
 
 export default function Networks(): JSX.Element {
-  const [instagram, setInstagram] = useState<string | undefined>('');
-  const [linkedin, setLinkedin] = useState<string | undefined>('');
-  const [github, setGithub] = useState<string | undefined>('');
-  const [whatsapp, setWhatsapp] = useState<string | undefined>('');
-  const [phone, setPhone] = useState<string | undefined>('');
-  const [email, setEmail] = useState<string | undefined>('');
+  const [instagram, setInstagram] = useState<string>('');
+  const [linkedin, setLinkedin] = useState<string >('');
+  const [github, setGithub] = useState<string>('');
+  const [whatsapp, setWhatsapp] = useState<string>('');
+  const [phone, setPhone] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -96,20 +97,9 @@ export default function Networks(): JSX.Element {
           value={email}
           onChange={(e) => {setEmail(e.target.value)}}
         />
-        <input 
-          type="submit" 
-          value="save"
-          style={{
-            marginTop: '15px',
-            width: '100%',
-            padding: '8px',
-            borderRadius: '4px',
-            border: 'none',
-            outline: 'none',
-            backgroundColor: 'var(--contrast-std)',
-            color: 'var(--secondaire-l1)',
-            cursor: 'pointer',
-          }}/>
+
+        <SubmitInput />
+
       </form>
     </MainContainer>
   )
