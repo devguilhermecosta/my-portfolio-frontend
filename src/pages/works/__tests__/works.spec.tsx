@@ -37,6 +37,16 @@ describe('<Works />', () => {
 
   });
 
+  it('should navigate to new work page', async () => {
+    renderWorks();
+
+    const newWork = screen.getByText(/new work/i);
+
+    fireEvent.click(newWork);
+
+    await waitFor(() => expect(window.location.href).toContain('/admin/dashboard/works/new'));
+  });
+
   it('should return to dashboard', async () => {
     renderWorks();
 
@@ -45,6 +55,5 @@ describe('<Works />', () => {
     fireEvent.click(backButton);
 
     await waitFor(() => expect(window.location.href).toContain('/admin/dashboard'));
-
   });
 })

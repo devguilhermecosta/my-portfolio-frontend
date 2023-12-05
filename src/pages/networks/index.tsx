@@ -1,6 +1,6 @@
 import MainContainer from "../../components/mainContainer";
 import { useState, useEffect, FormEvent, useContext } from 'react';
-import axios from "axios";
+import { api } from "../../utils/api";
 import Input from "../../components/input";
 import { AuthContext } from "../../contexts/authContext";
 import toast from "react-hot-toast";
@@ -19,7 +19,7 @@ export default function Networks(): JSX.Element {
 
   useEffect(() => {
     async function getNetworks() {
-      await axios.get('http://127.0.0.1:8000/networks/api/v1/')
+      await api.get('/networks/api/v1/')
       .then(response => {
         setInstagram(response.data.instagram);
         setLinkedin(response.data.linkedin);
@@ -56,7 +56,7 @@ export default function Networks(): JSX.Element {
       email: formData.get('email')
     }
 
-    await axios.patch('http://127.0.0.1:8000/networks/api/v1/', data, config)
+    await api.patch('/networks/api/v1/', data, config)
     .then((response) => {
       toast.success('save successfully');
       console.log(`save successfully with status code ${response.status}`);

@@ -4,6 +4,7 @@ import LoginPage from './pages/login';
 import Networks from './pages/networks';
 import Works from './pages/works';
 import PrivateRoute from './components/privateRoute';
+import NewWork from './pages/works/new';
 
 export const router = createBrowserRouter([
   {
@@ -21,5 +22,9 @@ export const router = createBrowserRouter([
   {
     path: 'admin/dashboard/works',
     element: <PrivateRoute><Works /></PrivateRoute>
+  },
+  {
+    path:'admin/dashboard/works/new',
+    element: <PrivateRoute><NewWork /></PrivateRoute>
   }
 ])
