@@ -2,7 +2,7 @@ import { ChangeEvent } from "react";
 
 interface InputProps {
   labelName: string;
-  value: string | undefined;
+  value: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
