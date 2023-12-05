@@ -55,7 +55,7 @@ describe('<Dashboard />', () => {
     await waitFor(() => expect(window.location.href).toContain('/admin/dashboard/networks'));
   });
 
-  it('should navigate the user to works page', async () => {
+  it('should navigate to works page', async () => {
     renderDashboard();
 
     const logoutButton = screen.getByText(/^works$/i);
