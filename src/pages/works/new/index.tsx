@@ -6,88 +6,142 @@ import SubmitInput from "../../../components/submitInput";
 import Style from './newWork.module.css';
 import { api } from "../../../utils/api";
 import { AuthContext } from "../../../contexts/authContext";
+import Loading from "../../../components/loading";
 import toast from "react-hot-toast";
+import BackButton from "../../../components/backButton";
+import { useNavigate } from "react-router-dom";
+
+interface ErrorProps {
+  title?: string;
+  description?: string;
+  cover?: string;
+}
 
 export default function NewWork(): JSX.Element {
   const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const [link, setLink] = useState('');
-  const [cover, setCover] = useState<string | undefined>();
+  const [cover, setCover] = useState<File | null>();
+  const [coverUrl, setCoverUrl] = useState<string | undefined>('');
+  const [titleError, setTitleError] = useState<string | undefined>('');
+  const [coverError, setCoverError] = useState<string | undefined>();
+  const [descriptionError, setDescriptionError] = useState<string | undefined>();
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const { user } = useContext(AuthContext);
+  const borderError = '2px solid red';
 
-  function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
-    event.preventDefault();
-    
-    const file = event.currentTarget.files;
+  function handleFileOnChange(e: ChangeEvent<HTMLInputElement>) {
+    e.preventDefault();
+    const file = e.target.files;
     
     if (file) {
       const url = URL.createObjectURL(file[0]);
-      setCover(url);
+      setCover(file[0]);
+      setCoverUrl(url);
     }
+  }
 
+  function cleanFields(): void {
+    setTitle('');
+    setDescription('');
+    setLink('');
+    setCover(null);
+    setTitleError('');
+    setDescriptionError('');
+    setCoverError('');
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
 
-  event.preventDefault();
+    setLoading(true);
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
 
-  const formData = new FormData(event.currentTarget);
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${user}`,
+      }
+    }
 
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${user}`,
-    },
-  }
-
-  const data = {
-    title: formData.get('title'),
-    description: formData.get('description'),
-    link: formData.get('link'),
-    cover: formData.get('cover'),
-  }
-
-
-  await api.post('/work/api/create/', data, config)
-  .then(() => toast.success('work created successfully'))
-  .catch((e) => toast.error(e))
-
+    await api.post('/work/api/create/', {
+      title: formData.get('title'),
+      description: formData.get('description'),
+      link: formData.get('link'),
+      cover: cover,
+    }, config)
+    .then(() => {
+      toast.success('work created successfully');
+      // cleanFields();
+    })
+    .catch(e => {
+      const error = e.response.data as ErrorProps;
+      setTitleError(error?.title);
+      setDescriptionError(error?.description);
+      setCoverError(error?.cover);
+      toast.error('check errors on fields');
+    })
+    .finally(() => setLoading(false))
   }
 
   return (
     <MainContainer>
+
+      {loading && (<Loading />)}
+
+      <BackButton onClick={() => navigate('/admin/dashboard/works')}/>
+  
       <h1 className={Style.C_Work_title}>New Work</h1>
+
       <form className={Style.C_work_form} encType="multipart/form-data" onSubmit={handleSubmit}>
 
-        <Input labelName="title" value={title} onChange={(e) => {setTitle(e.target.value)}}/>
+        <Input 
+          labelName="title" 
+          value={title} 
+          onChange={(e) => {setTitle(e.target.value)}} 
+          error={titleError}
+        />
   
         <div className={Style.C_work_c_textarea}>
-          <label htmlFor="description">Description:</label>
+          <label htmlFor="description">description:</label>
           <textarea
             name="description"
             id="description"
+            value={description}
+            onChange={(e) => {setDescription(e.target.value)}}
+            style={{ border: descriptionError ? borderError : 'none' }}
           />
         </div>
   
-        <Input labelName="link" value={link} onChange={(e) => {setLink(e.target.value)}} />
+        <Input 
+          labelName="link" 
+          value={link} onChange={(e) => {setLink(e.target.value)}} 
+        />
 
+        <label htmlFor="cover">cover</label>
         <div className={Style.C_work_c_cover}>
-          <AiOutlineUpload size={100} style={{
-            border: '1px solid var(--secondaire-std)',
-            borderRadius: '8px',
-            display: 'block',
-          }}/>
+          <AiOutlineUpload 
+            id="strokeCover" 
+            size={100} 
+            style={{
+              color: coverError ? 'red' : 'white',
+              border: coverError ? borderError : '2px solid var(--secondaire-std)',
+              borderRadius: '8px',
+              display: 'block',
+            }}
+          />
           <input
             type="file" 
             name="cover"
+            id="cover"
             accept="image/*"
             className={Style.custom_input_file}
-            onChange={(e) => handleFileChange(e)}
+            onChange={(e) => handleFileOnChange(e)}
           />
         </div>
         
-        {cover && (
-          <img src={cover} alt="coverimage" className={Style.Image_preview}/>
-        )}
+        {cover && (<img src={coverUrl} alt="coverimage" className={Style.Image_preview}/>)}
 
         <SubmitInput />
         

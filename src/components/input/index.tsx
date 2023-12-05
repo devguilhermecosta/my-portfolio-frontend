@@ -3,6 +3,7 @@ import { ChangeEvent } from "react";
 interface InputProps {
   labelName: string;
   value: string;
+  error?: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -33,7 +34,7 @@ export default function Input({ ...props }: InputProps): JSX.Element {
           display: 'block',
           width: '100%',
           maxWidth: '600px',
-          border: 'none',
+          border: props.error ? '2px solid red' : 'none',
           borderRadius: '4px',
           padding: '8px',
           outline: 'none',

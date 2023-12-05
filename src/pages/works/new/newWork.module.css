@@ -31,6 +31,12 @@
   width: fit-content;
 }
 
+label[for='cover'] {
+  display: block;
+  text-align: center;
+  margin-top: 10px;
+}
+
 .custom_input_file,
 .custom_input_file::before {
   position: absolute;

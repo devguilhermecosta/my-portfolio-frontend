@@ -30,5 +30,8 @@ export const handlers = [
   }),
   http.get(`${baseUrl}/work/api/list/`, () => {
     return HttpResponse.json(workList , { status: 200 })
+  }),
+  http.post(`${baseUrl}/work/api/create/`, () => {
+    return new HttpResponse(null, { status: 400 });
   })
 ]
