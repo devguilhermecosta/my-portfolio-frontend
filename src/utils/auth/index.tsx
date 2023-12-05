@@ -1,7 +1,8 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
+import { api } from "../api";
 
 const tokenRefreshVerify = async function(tokenRefresh: string | null): Promise<AxiosResponse> {
-  const response = await axios.post('http://127.0.0.1:8000/api/token/refresh/', {
+  const response = await api.post('/api/token/refresh/', {
     refresh: tokenRefresh
   });
 
@@ -12,7 +13,7 @@ const tokenRefreshVerify = async function(tokenRefresh: string | null): Promise<
 }
 
 const tokenAccessVerify = async function(tokenAccess: string): Promise<AxiosResponse> {
-  const response = await axios.post('http://127.0.0.1:8000/api/token/verify/', {
+  const response = await api.post('/api/token/verify/', {
     token: tokenAccess
   });
 

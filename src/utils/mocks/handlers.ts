@@ -1,17 +1,18 @@
 import { http, HttpResponse } from 'msw';
 import { workList } from './worksList';
+import { baseUrl } from '../api';
 
 export const handlers = [
-  http.post('http://127.0.0.1:8000/api/token/', () => {
+  http.post(`${baseUrl}/api/token/`, () => {
     return new HttpResponse('any');
   }),
-  http.post('http://127.0.0.1:8000/api/token/refresh/', () => {
+  http.post(`${baseUrl}/api/token/refresh/`, () => {
     return new HttpResponse('any');
   }),
-  http.post('http://127.0.0.1:8000/api/token/verify/', () => {
+  http.post(`${baseUrl}/api/token/verify/`, () => {
     return new HttpResponse('any');
   }),
-  http.get('http://127.0.0.1:8000/networks/api/v1/', () => {
+  http.get(`${baseUrl}/networks/api/v1/`, () => {
     return HttpResponse.json({
         email: "guilherme@email.com",
         github: "https://github.com",
@@ -21,13 +22,13 @@ export const handlers = [
         whatsapp: "https://whatsapp.com",
     }, { status: 200 });
   }),
-  http.post('http://127.0.0.1:8000/networks/api/v1/', () => {
+  http.post(`${baseUrl}/networks/api/v1/`, () => {
     return new HttpResponse('any');
   }),
-  http.patch('http://127.0.0.1:8000/networks/api/v1/', () => {
+  http.patch(`${baseUrl}/networks/api/v1/`, () => {
     return new HttpResponse('any');
   }),
-  http.get('http://127.0.0.1:8000/work/api/list/', () => {
+  http.get(`${baseUrl}/work/api/list/`, () => {
     return HttpResponse.json(workList , { status: 200 })
   })
 ]

@@ -1,6 +1,7 @@
 import { FormEvent, ReactNode, createContext, useCallback, useEffect, useState } from 'react';
 import { tokenRefreshVerify } from '../../utils/auth';
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
+import { api } from '../../utils/api';
 
 interface AuthContextData {
   userTokens: string | null;
@@ -19,9 +20,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const handleLogin = async function(event: FormEvent<HTMLFormElement>): Promise<AxiosResponse> {
     const formData = new FormData(event.currentTarget);
-    const url = 'http://127.0.0.1:8000/api/token/';
+    const url = '/api/token/';
 
-    const response = await axios.post(url, {
+    const response = await api.post(url, {
       username: formData.get('username'),
       password: formData.get('password')
     });
