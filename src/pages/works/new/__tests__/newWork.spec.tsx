@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
-import { describe, it } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 import NewWork from '..';
 import userEvent from '@testing-library/user-event';
@@ -34,6 +34,8 @@ describe('<NewWork >', () => {
       }, { status: 400 })
     }))
 
+    const user = userEvent.setup();
+
     const page = render(
       <BrowserRouter>
         <NewWork />
@@ -41,24 +43,37 @@ describe('<NewWork >', () => {
     );
 
     const borderStyle = '2px solid red';
+    const submitButton = screen.getByText(/save/i);
+    await user.click(submitButton);
+
+    expect(await screen.findByLabelText(/title/i)).toHaveStyle({ border: borderStyle });
+    expect(await screen.findByLabelText(/description/i)).toHaveStyle({ border: borderStyle });
+    expect(page.container.querySelector('#strokeCover')).toHaveStyle({ border: borderStyle });
+
+  });
+
+  it('should render the work images manager if the work is created', async () => {
+    server.use(http.post(`${baseUrl}/work/api/create/`, async () => {
+      return HttpResponse.json({
+        id: 1,
+        title: 'work title',
+        link: 'https://link.com',
+        description: 'work description',
+      }, { status: 201 })
+    }))
+
+    const user = userEvent.setup();
+
+    render(
+      <BrowserRouter>
+        <NewWork />
+      </BrowserRouter>
+    );
 
     const submitButton = screen.getByText(/save/i);
+    await user.click(submitButton);
 
-    await userEvent.click(submitButton);
-
-    const titleInput = await screen.findByLabelText(/title/i);
-    const description = await screen.findByLabelText(/description/i);
-    const cover = page.container.querySelector('#strokeCover');
-
-    expect(titleInput).toHaveStyle({
-      border: borderStyle
-    })
-    expect(description).toHaveStyle({
-      border: borderStyle
-    })
-    expect(cover).toHaveStyle({
-      border: borderStyle
-    })
+    expect(await screen.findByText(/now, add some images/i));
 
   });
 })
