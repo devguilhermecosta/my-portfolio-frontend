@@ -8,6 +8,15 @@ import { useNavigate } from "react-router-dom";
 import BackButton from "../../components/backButton";
 import SubmitInput from "../../components/submitInput";
 
+interface ErrorDataProps {
+  instagram?: string;
+  linkedin?: string;
+  github?: string;
+  whatsapp?: string;
+  phone?: string;
+  email?: string;
+}
+
 export default function Networks(): JSX.Element {
   const [instagram, setInstagram] = useState<string>('');
   const [linkedin, setLinkedin] = useState<string >('');
@@ -49,6 +58,23 @@ export default function Networks(): JSX.Element {
   
   }, []);
 
+  function handleErrorFields(errorData: ErrorDataProps): void {
+    setInstagramError(errorData?.instagram);
+    setLinkedinError(errorData?.linkedin);
+    setGithubError(errorData?.github);
+    setWhatsappError(errorData?.whatsapp);
+    setPhoneError(errorData?.phone);
+    setEmailError(errorData?.email);
+  }
+
+  function cleanErrorFields(): void {
+    setInstagramError('');
+    setLinkedinError('');
+    setGithubError('');
+    setWhatsappError('');
+    setPhoneError('');
+    setEmailError('');
+  }
 
   async function handleUpdate(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -75,21 +101,11 @@ export default function Networks(): JSX.Element {
       await api.patch('/networks/api/v1/', data, config)
       .then(() => {
         toast.success('save successfully');
-        setInstagramError('');
-        setLinkedinError('');
-        setGithubError('');
-        setWhatsappError('');
-        setPhoneError('');
-        setEmailError('');
+        cleanErrorFields();
       })
       .catch((e) => {
         toast.error('error on save');
-        setInstagramError(e.response.data.instagram);
-        setLinkedinError(e.response.data.linkedin);
-        setGithubError(e.response.data.github);
-        setWhatsappError(e.response.data.whatsapp);
-        setPhoneError(e.response.data.phone);
-        setEmailError(e.response.data.email);
+        handleErrorFields(e.response.data);
       })
 
       return
@@ -98,15 +114,11 @@ export default function Networks(): JSX.Element {
     await api.post('/networks/api/v1/', data, config)
     .then(() => {
       toast.success('created successfully');
+      cleanErrorFields();
     })
     .catch((e) => {
       toast.error('error on save');
-      setInstagramError(e.response.data.instagram);
-      setLinkedinError(e.response.data.linkedin);
-      setGithubError(e.response.data.github);
-      setWhatsappError(e.response.data.whatsapp);
-      setPhoneError(e.response.data.phone);
-      setEmailError(e.response.data.email);
+      handleErrorFields(e.response.data);
     })
 
   }
