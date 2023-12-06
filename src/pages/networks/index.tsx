@@ -21,8 +21,10 @@ export default function Networks(): JSX.Element {
   const [whatsappError, setWhatsappError] = useState<string | undefined>();
   const [phoneError, setPhoneError] = useState<string | undefined>();
   const [emailError, setEmailError] = useState<string | undefined>();
-  const { user } = useContext(AuthContext);
+
   const [networkExists, setNetworkExists] = useState(false);
+
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -71,22 +73,31 @@ export default function Networks(): JSX.Element {
 
     if (networkExists) {
       await api.patch('/networks/api/v1/', data, config)
-      .then((response) => {
+      .then(() => {
         toast.success('save successfully');
-        console.log(`save successfully with status code ${response.status}`);
+        setInstagramError('');
+        setLinkedinError('');
+        setGithubError('');
+        setWhatsappError('');
+        setPhoneError('');
+        setEmailError('');
       })
       .catch((e) => {
         toast.error('error on save');
-        console.error(`error on save: ${e}`);
+        setInstagramError(e.response.data.instagram);
+        setLinkedinError(e.response.data.linkedin);
+        setGithubError(e.response.data.github);
+        setWhatsappError(e.response.data.whatsapp);
+        setPhoneError(e.response.data.phone);
+        setEmailError(e.response.data.email);
       })
 
       return
     }
 
     await api.post('/networks/api/v1/', data, config)
-    .then((response) => {
+    .then(() => {
       toast.success('created successfully');
-      console.log(`created successfully with status code ${response.status}`);
     })
     .catch((e) => {
       toast.error('error on save');

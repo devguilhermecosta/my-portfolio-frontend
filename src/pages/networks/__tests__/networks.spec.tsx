@@ -1,111 +1,188 @@
 import '@testing-library/jest-dom';
-import { describe, it, vi, expect } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
+import { fireEvent, render, screen } from '@testing-library/react';
 import Networks from '..';
 import userEvent from '@testing-library/user-event';
 import { server } from '../../../utils/mocks/node';
 import { http, HttpResponse } from 'msw';
 import { BrowserRouter } from 'react-router-dom';
-
-const renderNetworks = () => {
-  return render(
-    <BrowserRouter>
-      <Networks />
-    </BrowserRouter>
-  );
-}
+import { baseUrl } from '../../../utils/api';
 
 describe('<Networks />', () => {
-  it('should render the networks', async () => {
+  const renderNetworks = () => {
+    return render(
+      <BrowserRouter>
+        <Networks />
+      </BrowserRouter>
+    );
+  };
+
+  const networksData = {
+    email: 'email@email.com',
+    github: 'https://github.com',
+    linkedin: 'https://linkedin.com',
+    phone: '41988082294',
+    whatsapp: '41988082295',
+    instagram: 'https://instagram.com',
+  };
+
+  const netWorksErrors = {
+    email: 'Campo obrigatório',
+    github: 'Campo obrigatório',
+    linkedin: 'Campo obrigatório',
+    phone: 'Campo obrigatório',
+    whatsapp: 'Campo obrigatório',
+    instagram: 'Campo obrigatório',
+  };
+
+  const inputStyleOnError = '2px solid red';
+
+  it('should render the networks if networks exists when get request', async () => {
+    server.use(
+      http.get(`${baseUrl}/networks/api/v1/`, () => {
+        return HttpResponse.json(networksData, { status: 200 })
+      }),
+    );
+
     renderNetworks();
   
-    await screen.findByDisplayValue('guilherme@email.com');
+    await screen.findByDisplayValue('email@email.com');
     await screen.findByDisplayValue('https://github.com');
     await screen.findByDisplayValue('https://instagram.com');
     await screen.findByDisplayValue('https://linkedin.com');
-    await screen.findByDisplayValue('46999083251');
-    await screen.findByDisplayValue('https://whatsapp.com');
+    await screen.findByDisplayValue('41988082294');
+    await screen.findByDisplayValue('41988082295');
     await screen.findByText('save');
+    await screen.findByText('<');
 
   });
 
-  it('should return error message when patch request', async () => {
+  it('should render red input fields when error on patch request', async () => {
     server.use(
+      http.get('http://127.0.0.1:8000/networks/api/v1/', () => {
+        return HttpResponse.json(networksData, { status: 200 })
+      }),
       http.patch('http://127.0.0.1:8000/networks/api/v1/', () => {
-        return new HttpResponse(null, { status: 400 })
+        return HttpResponse.json(netWorksErrors, { status: 400 })
       })
     );
 
+    const user = userEvent.setup();
+
     renderNetworks();
 
-    const spy = vi.spyOn(console, 'error');
     const submit = screen.getByText(/save/i);
-    await userEvent.click(submit);
 
-    expect(spy).toHaveBeenCalledWith('error on save: AxiosError: Request failed with status code 400');
+    await user.click(submit);
+
+    expect(await screen.findByLabelText(/email/i)).toHaveStyle({ border: inputStyleOnError });
+    expect(await screen.findByLabelText(/instagram/i)).toHaveStyle({ border: inputStyleOnError });
+    expect(await screen.findByLabelText(/github/i)).toHaveStyle({ border: inputStyleOnError });
+    expect(await screen.findByLabelText(/linkedin/i)).toHaveStyle({ border: inputStyleOnError });
+    expect(await screen.findByLabelText(/phone/i)).toHaveStyle({ border: inputStyleOnError });
+    expect(await screen.findByLabelText(/whatsapp/i)).toHaveStyle({ border: inputStyleOnError });
+
   });
 
-  it('should return success message when patch request', async () => {
+  it('should update the field when patch request', async () => {
+    /* set the email to blank */
+    networksData.email = '';
+
     server.use(
-      http.patch('http://127.0.0.1:8000/networks/api/v1/', () => {
+      http.get('http://127.0.0.1:8000/networks/api/v1/', () => {
+        return HttpResponse.json(networksData, { status: 200 })
+      }),
+      http.patch(`${baseUrl}/networks/api/v1/`, () => {
         return new HttpResponse(null, { status: 204 })
-      })
+      }),
     );
 
+    const user = userEvent.setup();
+
     renderNetworks();
 
-    const spy = vi.spyOn(console, 'log');
-    const submit = screen.getByText(/save/i);
-    await userEvent.click(submit);
+    const submitInput = screen.getByText(/save/i);
 
-    expect(spy).toHaveBeenCalledWith('save successfully with status code 204');
-  });
+    const emailValue = 'email@email.com';
+    await user.type(await screen.findByLabelText(/email/i), emailValue);
+    await user.click(submitInput);
 
-  it('should return to dashboard', async () => {
-    renderNetworks();
-
-    const backButton = screen.getByText(/</i);
-    await userEvent.click(backButton);
-
-    await waitFor(() => expect(window.location.href).toContain('/admin/dashboard'));
+    expect(await screen.findByDisplayValue(emailValue)).toBeInTheDocument();
+  
   });
 
   it('should render red input fields when error on post request', async () => {
     server.use(
+      /* returns 404 to say that there is no networks instance */
       http.get('http://127.0.0.1:8000/networks/api/v1/', () => {
         return new HttpResponse(null, { status: 404 })
       }),
       http.post('http://127.0.0.1:8000/networks/api/v1/', () => {
-        return HttpResponse.json({
-          email: 'Campo obrigatório',
-          github: 'Campo obrigatório',
-          linkedin: 'Campo obrigatório',
-          phone: 'Campo obrigatório',
-          whatsapp: 'Campo obrigatório',
-          instagram: 'Campo obrigatório',
-        }, { status: 400 })
+        return HttpResponse.json(netWorksErrors, { status: 400 })
       })
     );
+
+    const user = userEvent.setup();
+
+    renderNetworks();
+
+    const inputStyleOnError = '2px solid red';
+    const submitButton = screen.getByText(/save/i);
+    await user.click(submitButton);
+
+    expect(await screen.findByLabelText(/email/i)).toHaveStyle({ border: inputStyleOnError });
+    expect(await screen.findByLabelText(/instagram/i)).toHaveStyle({ border: inputStyleOnError });
+    expect(await screen.findByLabelText(/github/i)).toHaveStyle({ border: inputStyleOnError });
+    expect(await screen.findByLabelText(/linkedin/i)).toHaveStyle({ border: inputStyleOnError });
+    expect(await screen.findByLabelText(/phone/i)).toHaveStyle({ border: inputStyleOnError });
+    expect(await screen.findByLabelText(/whatsapp/i)).toHaveStyle({ border: inputStyleOnError });
+
+  });
+
+  it('should create a new networks instance when post request and the networks does not exists', async () => {
+    /* set the email data */
+    networksData.email = 'email@email.com';
+
+    server.use(
+      /* returns 404 to say that there is no networks instance */
+      http.get('http://127.0.0.1:8000/networks/api/v1/', () => {
+        return new HttpResponse(null, { status: 404 })
+      }),
+      http.post('http://127.0.0.1:8000/networks/api/v1/', () => {
+        return HttpResponse.json(networksData, { status: 201 })
+      })
+    );
+
+    const user = userEvent.setup();
 
     renderNetworks();
 
     const submitButton = screen.getByText(/save/i);
+    
+    await user.type(screen.getByLabelText(/email/i), networksData.email);
+    await user.type(screen.getByLabelText(/instagram/i), networksData.instagram);
+    await user.type(screen.getByLabelText(/github/i), networksData.github);
+    await user.type(screen.getByLabelText(/linkedin/i), networksData.linkedin);
+    await user.type(screen.getByLabelText(/phone/i), networksData.phone);
+    await user.type(screen.getByLabelText(/whatsapp/i), networksData.whatsapp);
+    
+    await user.click(submitButton);
 
-    await userEvent.click(submitButton);
+    expect(await screen.findByDisplayValue(networksData.email)).toBeInTheDocument();
+    expect(await screen.findByDisplayValue(networksData.instagram)).toBeInTheDocument();
+    expect(await screen.findByDisplayValue(networksData.github)).toBeInTheDocument();
+    expect(await screen.findByDisplayValue(networksData.linkedin)).toBeInTheDocument();
+    expect(await screen.findByDisplayValue(networksData.phone)).toBeInTheDocument();
+    expect(await screen.findByDisplayValue(networksData.whatsapp)).toBeInTheDocument();
+  
+  });
 
-    const email = await screen.findByLabelText(/email/i);
-    const instagram = await screen.findByLabelText(/instagram/i);
-    const github = await screen.findByLabelText(/github/i);
-    const linkedin = await screen.findByLabelText(/linkedin/i);
-    const phone = await screen.findByLabelText(/phone/i);
-    const whatsapp = await screen.findByLabelText(/whatsapp/i);
+  it('should return to dashboard', () => {
+    renderNetworks();
 
-    expect(email).toHaveStyle({ border: '2px solid red' });
-    expect(instagram).toHaveStyle({ border: '2px solid red' });
-    expect(github).toHaveStyle({ border: '2px solid red' });
-    expect(linkedin).toHaveStyle({ border: '2px solid red' });
-    expect(phone).toHaveStyle({ border: '2px solid red' });
-    expect(whatsapp).toHaveStyle({ border: '2px solid red' });
-
+    const backButton = screen.getByText(/</i);
+    fireEvent.click(backButton);
+    expect(window.location.href).toContain('/admin/dashboard');
+  
   });
 })
