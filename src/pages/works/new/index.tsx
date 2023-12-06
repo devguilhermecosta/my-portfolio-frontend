@@ -10,10 +10,12 @@ import Loading from "../../../components/loading";
 import toast from "react-hot-toast";
 import BackButton from "../../../components/backButton";
 import { useNavigate } from "react-router-dom";
+import ImagesWorkManager from "../../../components/imagesWorkManager";
 
 interface ErrorProps {
   title?: string;
   description?: string;
+  link?: string;
   cover?: string;
 }
 
@@ -24,11 +26,15 @@ export default function NewWork(): JSX.Element {
   const [cover, setCover] = useState<File | null>();
   const [coverUrl, setCoverUrl] = useState<string | undefined>('');
   const [titleError, setTitleError] = useState<string | undefined>('');
+  const [linkError, setLinkError] = useState<string | undefined>('');
   const [coverError, setCoverError] = useState<string | undefined>();
   const [descriptionError, setDescriptionError] = useState<string | undefined>();
+
+  const [workId, setWorkId] = useState<number | undefined>();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
+
   const borderError = '2px solid red';
 
   function handleFileOnChange(e: ChangeEvent<HTMLInputElement>) {
@@ -52,6 +58,7 @@ export default function NewWork(): JSX.Element {
   function cleanErrorFields(): void {
     setTitleError('');
     setDescriptionError('');
+    setLinkError('');
     setCoverError('');
   }
 
@@ -76,9 +83,9 @@ export default function NewWork(): JSX.Element {
     }
 
     await api.post('/work/api/create/', data, config)
-    .then(() => {
-      // cleanFields();
+    .then((response) => {
       cleanErrorFields();
+      setWorkId(response.data.id);
       toast.success('work created successfully');
     })
     .catch(e => {
@@ -86,6 +93,7 @@ export default function NewWork(): JSX.Element {
       setTitleError(error?.title);
       setDescriptionError(error?.description);
       setCoverError(error?.cover);
+      setLinkError(error?.link);
       toast.error('check errors on fields');
     })
     .finally(() => setLoading(false))
@@ -95,6 +103,8 @@ export default function NewWork(): JSX.Element {
     <MainContainer>
 
       {loading && (<Loading />)}
+
+      {workId && (<ImagesWorkManager workId={workId}/>)}
 
       <BackButton onClick={() => navigate('/admin/dashboard/works')}/>
   
@@ -123,6 +133,7 @@ export default function NewWork(): JSX.Element {
         <Input 
           labelName="link" 
           value={link} onChange={(e) => {setLink(e.target.value)}} 
+          error={linkError}
         />
 
         <label htmlFor="cover">cover</label>
