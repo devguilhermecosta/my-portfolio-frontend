@@ -47,6 +47,9 @@ export default function NewWork(): JSX.Element {
     setDescription('');
     setLink('');
     setCover(null);
+  }
+
+  function cleanErrorFields(): void {
     setTitleError('');
     setDescriptionError('');
     setCoverError('');
@@ -65,15 +68,18 @@ export default function NewWork(): JSX.Element {
       }
     }
 
-    await api.post('/work/api/create/', {
+    const data = {
       title: formData.get('title'),
       description: formData.get('description'),
       link: formData.get('link'),
       cover: cover,
-    }, config)
+    }
+
+    await api.post('/work/api/create/', data, config)
     .then(() => {
-      toast.success('work created successfully');
       // cleanFields();
+      cleanErrorFields();
+      toast.success('work created successfully');
     })
     .catch(e => {
       const error = e.response.data as ErrorProps;
