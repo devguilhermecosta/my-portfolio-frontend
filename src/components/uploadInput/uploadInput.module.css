@@ -1,0 +1,23 @@
+.C_custom_input {
+  position: relative;
+  width: 100%;
+  max-width: fit-content;
+}
+
+.custom_input_file,
+.custom_input_file::before {
+  position: absolute;
+  inset: 0;
+}
+
+.custom_input_file {
+  width: 100%;
+  height: 100%;
+  max-width: fit-content;
+  color: transparent;
+  cursor: pointer;
+}
+
+.custom_input_file::-webkit-file-upload-button {
+  display: none;
+}
