@@ -29,5 +29,8 @@ export const handlers = [
   }),
   http.post(`${baseUrl}/work/api/create/`, () => {
     return new HttpResponse(null, { status: 400 });
+  }),
+  http.post(`${baseUrl}/work/api/images/create/`, () => {
+    return new HttpResponse(null, { status: 400 });
   })
 ]
