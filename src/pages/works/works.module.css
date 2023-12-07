@@ -35,6 +35,7 @@
 .C_work_cover {
   object-fit: cover;
   border-radius: 20px;
+  max-height: 200px;
 }
 
 .server_error {

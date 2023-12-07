@@ -20,3 +20,16 @@
   --contrast-g1: #123C91;
   --gray-std: #3b3a3a76;
 }
+
+body::-webkit-scrollbar {
+  width: 12px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: var(--primary-l1);
+  border-radius: 20px;
+}
+
+body::-webkit-scrollbar-track {
+  background-color: var(--primary-g1);
+}
