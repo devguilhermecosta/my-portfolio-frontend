@@ -1,12 +1,14 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 import NewWork from '..';
 import userEvent from '@testing-library/user-event';
 import { server } from '../../../../utils/mocks/node';
 import { http, HttpResponse } from 'msw';
 import { baseUrl } from '../../../../utils/api';
+
+global.URL.createObjectURL = vi.fn();
 
 describe('<NewWork >', () => {
   it('should render a new work form', async () => {
@@ -75,5 +77,40 @@ describe('<NewWork >', () => {
 
     expect(await screen.findByText(/now, add some images/i));
 
+  });
+
+  it('should clean the work form if the work is created', async () => {
+    server.use(
+      http.post(`${baseUrl}/work/api/create/`, async () => {
+      return HttpResponse.json({
+        id: 1,
+        title: 'work title',
+        link: 'https://link.com',
+        description: 'work description',
+        }, { status: 201 })
+      }),
+      http.post(`${baseUrl}/work/api/images/create/`, () => {
+        return new HttpResponse(null, { status: 201 })
+      })
+    
+    )
+
+    const user = userEvent.setup();
+
+    render(
+      <BrowserRouter>
+        <NewWork />
+      </BrowserRouter>
+    );
+
+    const submitButton = screen.getByText(/save/i);
+    await user.click(submitButton);
+
+    const inputUpload = await screen.findByTestId(/upload_images/i);
+
+    const image = new File(['(⌐□_□)'], 'test.png', { type: 'images/png' })
+    await user.upload(inputUpload, image)
+
+    expect(await screen.findByDisplayValue(/upload all images/i))
   });
 })
