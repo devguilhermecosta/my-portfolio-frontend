@@ -104,7 +104,7 @@ export default function ImagesWorkManager({ workId, user, afterActionFn }: Image
         </section>
 
         {images.length !== 0 && (
-          <SubmitInput onClick={() => handleUploadImages(workId)}/>
+          <SubmitInput value='upload all images' onClick={() => handleUploadImages(workId)}/>
         )}
       </section>
   )
