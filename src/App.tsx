@@ -5,7 +5,6 @@ import Networks from './pages/networks';
 import Works from './pages/works';
 import PrivateRoute from './components/privateRoute';
 import NewWork from './pages/works/new';
-import ImagesWorkManager from './components/imagesWorkManager';
 
 export const router = createBrowserRouter([
   {
@@ -27,9 +26,5 @@ export const router = createBrowserRouter([
   {
     path:'admin/dashboard/works/new',
     element: <PrivateRoute><NewWork /></PrivateRoute>
-  },
-  {
-    path: 'work_images',
-    element: <ImagesWorkManager workId={1}/>
   }
 ])
