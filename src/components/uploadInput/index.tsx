@@ -20,8 +20,7 @@ export default function UploadInput({ ...props }: UploadProps): JSX.Element {
       />
       <input
         type="file" 
-        name="cover"
-        id="cover"
+        data-testid="upload_images"
         accept="image/*"
         className={Style.custom_input_file}
         onChange={(e) => props.onChange(e)}
