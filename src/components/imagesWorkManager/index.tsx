@@ -73,9 +73,10 @@ export default function ImagesWorkManager({ workId, user, afterActionFn }: Image
   }
 
   return (
-      <section className={`${Style.C_work_images_manager} ${!visible ? Style.close_windows : ''}`}>
+      <section data-testid="C_work_imgs" className={`${Style.C_work_images_manager} ${!visible ? Style.close_windows : ''}`}>
 
-        <IoCloseCircleSharp 
+        <IoCloseCircleSharp
+          data-testid="close_button"
           size={28}
           style={{position: 'absolute', top: 0, right: 0}} 
           onClick={() => setVisible(false)}
