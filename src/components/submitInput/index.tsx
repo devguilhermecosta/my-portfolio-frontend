@@ -1,8 +1,13 @@
-export default function SubmitInput({ value }: { value?: string }): JSX.Element {
+interface SubmitProps {
+  value?: string;
+  onClick?: () => void;
+}
+
+export default function SubmitInput({ ...props }: SubmitProps): JSX.Element {
   return (
     <input 
     type="submit" 
-    value={!value ? 'save' : value}
+    value={!props.value ? 'save' : props.value}
     style={{
       marginTop: '15px',
       width: '100%',
@@ -13,6 +18,8 @@ export default function SubmitInput({ value }: { value?: string }): JSX.Element 
       backgroundColor: 'var(--contrast-std)',
       color: 'var(--secondaire-l1)',
       cursor: 'pointer',
-    }}/>
+    }}
+    onClick={props.onClick}
+    />
   )
 }
