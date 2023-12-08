@@ -40,8 +40,9 @@ export default function ImagesWorkManager({ workId, user, afterActionFn }: Image
     }
   }
 
-  function handleDelete(url: string): void {
-    setImages(images.filter((image) => image.url !== url));
+  function handleDelete(imageDelete: ImageProps): void {
+    setImages(images.filter((image) => image !== imageDelete));
+    console.log(`image deleted successfully: ${imageDelete.image.name}`);
   }
 
   async function handleUploadImages(workId: number): Promise<void> {    
@@ -53,17 +54,24 @@ export default function ImagesWorkManager({ workId, user, afterActionFn }: Image
         }
       }
 
+      const formData = new FormData();
+      formData.append('work_id', JSON.stringify(workId));
+      formData.append('url', JSON.stringify(image.image));
+
       const data = {
-        work_id: workId,
-        url: image.image,
+        work_id: formData.get('work_id'),
+        url: formData.get('url'),
       }
 
       await api.post(`${baseUrl}/work/api/images/create/`, data, config)
-      .then(() => {
+      .then((r) => {
         toast.success('upload successfully');
+        console.log(`created successfully with status code ${r.status}`);
       })
-      .catch(() => {
-        toast.error('error on upload images');
+      .catch((e) => {
+        const msg = 'error on upload images'
+        toast.error(msg);
+        console.error(`${msg} with status code ${e.response.status}`);
       })
       .finally(() => {
         setVisible(false);
@@ -89,7 +97,8 @@ export default function ImagesWorkManager({ workId, user, afterActionFn }: Image
         <section className={Style.C_work_images_grid}>
           {images.length > 0 && images.map((image, index) => (
             <div style={{ position: 'relative' }} key={index}>
-              <MdDelete 
+              <MdDelete
+                data-testid='image-delete' 
                 size={28} 
                 style={{ 
                   color: 'var(--contrast-l1)', 
@@ -97,7 +106,7 @@ export default function ImagesWorkManager({ workId, user, afterActionFn }: Image
                   position: 'absolute', 
                   top: 5, right: 5
                 }}
-                onClick={() => handleDelete(image.url)}
+                onClick={() => handleDelete(image)}
               />
               <img src={image.url} alt="work image" className={Style.C_work_images_img}/>
             </div>
