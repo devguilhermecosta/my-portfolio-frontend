@@ -1,6 +1,8 @@
+import { FormEvent } from "react";
+
 interface SubmitProps {
   value?: string;
-  onClick?: () => void;
+  onClick?: (e: FormEvent<Element>) => void;
 }
 
 export default function SubmitInput({ ...props }: SubmitProps): JSX.Element {
