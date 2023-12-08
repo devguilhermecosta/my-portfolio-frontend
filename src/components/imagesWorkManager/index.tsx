@@ -6,7 +6,6 @@ import { MdDelete } from "react-icons/md";
 import { IoCloseCircleSharp } from "react-icons/io5";
 import { api, baseUrl } from '../../utils/api';
 import toast from 'react-hot-toast';
-import * as fs from 'fs';
 
 interface ImagesManagerProps {
   workId: number;
@@ -59,12 +58,7 @@ export default function ImagesWorkManager({ workId, user, afterActionFn }: Image
       formData.append('work_id', JSON.stringify(workId));
       formData.append('url', image.image, image.image.name);
 
-      const data = {
-        work_id: formData.get('work_id'),
-        url: formData.get('url'),
-      }
-
-      await api.post(`${baseUrl}/work/api/images/create/`, data, config)
+      await api.post(`${baseUrl}/work/api/images/create/`, formData, config)
       .then((r) => {
         toast.success('upload successfully');
         console.log(`created successfully with status code ${r.status}`);
@@ -72,7 +66,7 @@ export default function ImagesWorkManager({ workId, user, afterActionFn }: Image
       .catch((e) => {
         const msg = 'error on upload images'
         toast.error(msg);
-        console.error(`${msg} with status code ${e}`);
+        console.error(`${msg} with status code ${e.response.status}`);
       })
       .finally(() => {
         setVisible(false);
