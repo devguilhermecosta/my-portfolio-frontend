@@ -45,6 +45,7 @@ export default function NewWork(): JSX.Element {
       const url = URL.createObjectURL(file[0]);
       setCover(file[0]);
       setCoverUrl(url);
+      e.target.value = '';
     }
   }
 
@@ -53,6 +54,8 @@ export default function NewWork(): JSX.Element {
     setDescription('');
     setLink('');
     setCover(null);
+    setCoverUrl('');
+    setWorkId(undefined);
   }
 
   function cleanErrorFields(): void {
