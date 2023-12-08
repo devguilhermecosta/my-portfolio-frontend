@@ -50,12 +50,14 @@ export default function NewWork(): JSX.Element {
   }
 
   function cleanFields(): void {
-    setTitle('');
-    setDescription('');
-    setLink('');
-    setCover(null);
-    setCoverUrl('');
-    setWorkId(undefined);
+    setTimeout(() => {
+      setTitle('');
+      setDescription('');
+      setLink('');
+      setCover(null);
+      setCoverUrl('');
+      setWorkId(undefined);
+    }, 1000)
   }
 
   function cleanErrorFields(): void {
@@ -108,7 +110,7 @@ export default function NewWork(): JSX.Element {
       {loading && (<Loading />)}
 
       {workId && (
-        <ImagesWorkManager user={user} workId={workId} afterActionFn={cleanFields}/>
+        <ImagesWorkManager user={user} workId={workId} afterActionFn={() => cleanFields()}/>
       )}
 
       <BackButton onClick={() => navigate('/admin/dashboard/works')}/>
