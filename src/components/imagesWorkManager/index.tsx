@@ -21,6 +21,7 @@ interface ImageProps {
 export default function ImagesWorkManager({ workId, user, afterActionFn }: ImagesManagerProps): JSX.Element {
   const [images, setImages] = useState<ImageProps[]>([]);
   const [visible, setVisible] = useState(true);
+  const [successUpload, setSuccessUpload] = useState(false);
 
   function handleImages(e: ChangeEvent<HTMLInputElement>) {
     const receivedImages = e.target.files;
@@ -47,30 +48,31 @@ export default function ImagesWorkManager({ workId, user, afterActionFn }: Image
 
   async function handleUploadImages(e: FormEvent, workId: number): Promise<void> {
     e.preventDefault();
+
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${user}`
+      }
+    }
     
     images.forEach(async (image) => {
-      const config = {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${user}`
-        }
-      }
-
       const formData = new FormData();
       formData.append('work_id', JSON.stringify(workId));
       formData.append('url', image.image, image.image.name);
 
       await api.post(`${baseUrl}/work/api/images/create/`, formData, config)
       .then((r) => {
-        toast.success('upload successfully');
+        setSuccessUpload(true);
         console.log(`created successfully with status code ${r.status}`);
       })
-      .catch((e) => {
-        const msg = 'error on upload images'
-        toast.error(msg);
-        console.error(`${msg} with status code ${e.response.status}`);
+      .catch((e) => {       
+        setSuccessUpload(false);
+        console.error(`error on upload images with status code ${e.response.status}`);
       })
     });
+
+    successUpload ? toast.success('upload successfully') : toast.error('error on upload images');
 
     setVisible(false);
     if (afterActionFn) afterActionFn();
