@@ -1,7 +1,7 @@
 import Style from './imagesWorkManager.module.css';
 import SubmitInput from '../submitInput';
 import UploadInput from '../uploadInput';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState, FormEvent } from 'react';
 import { MdDelete } from "react-icons/md";
 import { IoCloseCircleSharp } from "react-icons/io5";
 import { api, baseUrl } from '../../utils/api';
@@ -45,7 +45,9 @@ export default function ImagesWorkManager({ workId, user, afterActionFn }: Image
     console.log(`image deleted successfully: ${imageDelete.image.name}`);
   }
 
-  async function handleUploadImages(workId: number): Promise<void> {    
+  async function handleUploadImages(e: FormEvent, workId: number): Promise<void> {
+    e.preventDefault();
+    
     images.forEach(async (image) => {
       const config = {
         headers: {
@@ -68,11 +70,10 @@ export default function ImagesWorkManager({ workId, user, afterActionFn }: Image
         toast.error(msg);
         console.error(`${msg} with status code ${e.response.status}`);
       })
-      .finally(() => {
-        setVisible(false);
-        if (afterActionFn) afterActionFn();
-      })
-    })
+    });
+
+    setVisible(false);
+    if (afterActionFn) afterActionFn();
   }
 
   return (
@@ -82,7 +83,10 @@ export default function ImagesWorkManager({ workId, user, afterActionFn }: Image
           data-testid="close_button"
           size={28}
           style={{position: 'absolute', top: 0, right: 0}} 
-          onClick={() => setVisible(false)}
+          onClick={() => {
+            setVisible(false);
+            if (afterActionFn) afterActionFn();
+          }}
         />
 
         <h1>now, add some images</h1>
@@ -109,7 +113,7 @@ export default function ImagesWorkManager({ workId, user, afterActionFn }: Image
         </section>
 
         {images.length !== 0 && (
-          <SubmitInput value='upload all images' onClick={() => handleUploadImages(workId)}/>
+          <SubmitInput value='upload all images' onClick={(e) => handleUploadImages(e, workId)}/>
         )}
       </section>
   )
