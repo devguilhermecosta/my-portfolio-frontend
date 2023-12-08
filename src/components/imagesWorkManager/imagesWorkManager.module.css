@@ -13,7 +13,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  animation: open 700ms ease 700ms forwards;
+  animation: open 1s ease 700ms forwards;
   z-index: 1000;
 }
 
