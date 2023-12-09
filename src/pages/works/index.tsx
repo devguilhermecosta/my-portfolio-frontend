@@ -57,3 +57,5 @@ export default function Works(): JSX.Element {
     </MainContainer>
   )
 }
+
+// TODO on API, create an method to resize the images on upload
