@@ -50,14 +50,12 @@ export default function NewWork(): JSX.Element {
   }
 
   function cleanFields(): void {
-    setTimeout(() => {
       setTitle('');
       setDescription('');
       setLink('');
       setCover(null);
       setCoverUrl('');
       setWorkId(undefined);
-    }, 1000)
   }
 
   function cleanErrorFields(): void {
@@ -91,7 +89,7 @@ export default function NewWork(): JSX.Element {
     .then((response) => {
       cleanErrorFields();
       setWorkId(response.data.id);
-      toast.success('work created successfully');
+      toast.success('work created successfully', { duration: 4000 });
     })
     .catch(e => {
       const error = e.response.data as ErrorProps;
@@ -99,7 +97,7 @@ export default function NewWork(): JSX.Element {
       setDescriptionError(error?.description);
       setCoverError(error?.cover);
       setLinkError(error?.link);
-      toast.error('check errors on fields');
+      toast.error('check errors on fields', { duration: 4000 });
     })
     .finally(() => setLoading(false))
   }

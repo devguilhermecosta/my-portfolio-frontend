@@ -21,7 +21,6 @@ interface ImageProps {
 export default function ImagesWorkManager({ workId, user, afterActionFn }: ImagesManagerProps): JSX.Element {
   const [images, setImages] = useState<ImageProps[]>([]);
   const [visible, setVisible] = useState(true);
-  const [successUpload, setSuccessUpload] = useState(false);
 
   function handleImages(e: ChangeEvent<HTMLInputElement>) {
     const receivedImages = e.target.files;
@@ -63,19 +62,22 @@ export default function ImagesWorkManager({ workId, user, afterActionFn }: Image
 
       await api.post(`${baseUrl}/work/api/images/create/`, formData, config)
       .then((r) => {
-        setSuccessUpload(true);
+        toast.success('successfully created', { duration: 4000 });
         console.log(`created successfully with status code ${r.status}`);
       })
       .catch((e) => {       
-        setSuccessUpload(false);
+        toast.error(`error on upload image: ${e}`, { duration: 4000 });
         console.error(`error on upload images with status code ${e.response.status}`);
       })
     });
 
-    successUpload ? toast.success('upload successfully') : toast.error('error on upload images');
-
     setVisible(false);
-    if (afterActionFn) afterActionFn();
+
+    /**
+     * this must wait at least 1000ms to execute the function, 
+     * otherwise the animation will not work
+     */
+    afterActionFn ? setTimeout(() => afterActionFn(), 1000) : null;
   }
 
   return (
