@@ -42,7 +42,7 @@ export default function Works(): JSX.Element {
         {works && works.map((work) => (
           <section key={work.id} className={Style.C_work}>
             <div className={Style.C_work_image_container}>
-              <a href={`/admin/dashboard/work/${work.slug}`}>
+              <a href={`/admin/dashboard/works/${work.slug}`}>
                 <img 
                   className={Style.C_work_cover} 
                   src={`${baseUrl}${work.cover}`} 

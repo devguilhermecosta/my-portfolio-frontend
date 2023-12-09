@@ -5,6 +5,7 @@ import Networks from './pages/networks';
 import Works from './pages/works';
 import PrivateRoute from './components/privateRoute';
 import NewWork from './pages/works/new';
+import WorkDetail from './pages/works/details';
 
 export const router = createBrowserRouter([
   {
@@ -26,5 +27,9 @@ export const router = createBrowserRouter([
   {
     path:'admin/dashboard/works/new',
     element: <PrivateRoute><NewWork /></PrivateRoute>
+  },
+  {
+    path:'admin/dashboard/works/:slug',
+    element: <PrivateRoute><WorkDetail /></PrivateRoute>
   }
 ])
