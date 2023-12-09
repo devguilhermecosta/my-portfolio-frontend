@@ -108,7 +108,7 @@ export default function NewWork(): JSX.Element {
       {loading && (<Loading />)}
 
       {workId && (
-        <ImagesWorkManager user={user} workId={workId} afterActionFn={() => cleanFields()}/>
+        <ImagesWorkManager user={user} workId={workId} callbackFn={() => cleanFields()}/>
       )}
 
       <BackButton onClick={() => navigate('/admin/dashboard/works')}/>

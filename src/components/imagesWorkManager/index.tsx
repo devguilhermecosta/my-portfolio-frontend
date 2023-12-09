@@ -10,7 +10,7 @@ import toast from 'react-hot-toast';
 interface ImagesManagerProps {
   workId: number;
   user: string | null;
-  afterActionFn?: () => void;
+  callbackFn?: () => void;
 }
 
 interface ImageProps {
@@ -18,7 +18,7 @@ interface ImageProps {
   url: string;
 }
 
-export default function ImagesWorkManager({ workId, user, afterActionFn }: ImagesManagerProps): JSX.Element {
+export default function ImagesWorkManager({ workId, user, callbackFn }: ImagesManagerProps): JSX.Element {
   const [images, setImages] = useState<ImageProps[]>([]);
   const [visible, setVisible] = useState(true);
 
@@ -77,7 +77,7 @@ export default function ImagesWorkManager({ workId, user, afterActionFn }: Image
      * this must wait at least 1000ms to execute the function, 
      * otherwise the animation will not work
      */
-    afterActionFn ? setTimeout(() => afterActionFn(), 1000) : null;
+    callbackFn ? setTimeout(() => callbackFn(), 1000) : null;
   }
 
   return (
@@ -87,10 +87,6 @@ export default function ImagesWorkManager({ workId, user, afterActionFn }: Image
           data-testid="close_button"
           size={28}
           style={{position: 'absolute', top: 0, right: 0}} 
-          onClick={() => {
-            setVisible(false);
-            if (afterActionFn) afterActionFn();
-          }}
         />
 
         <h1>now, add some images</h1>
