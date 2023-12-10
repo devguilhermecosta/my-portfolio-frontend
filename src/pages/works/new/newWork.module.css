@@ -3,25 +3,6 @@
   max-width: 600px;
 }
 
-.C_work_c_textarea {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  column-gap: 16px;
-  margin-top: 10px;
-}
-
-.C_work_c_textarea textarea {
-  width: 100%;
-  max-width: 600px;
-  height: 100px;
-  border: none;
-  border-radius: 4px;
-  resize: none;
-  outline: none;
-  padding: 4px;
-}
-
 .C_work_c_cover {
   position: relative;
   display: flex;
@@ -53,16 +34,6 @@ label[for='cover'] {
 
 .custom_input_file::-webkit-file-upload-button {
   display: none;
-}
-
-.Image_preview {
-  display: block;
-  width: 100%;
-  max-width: 320px;
-  max-height: 320px;
-  border-radius: 10px;
-  text-align: center;
-  margin: 10px auto 0px auto;
 }
 
 @media screen and (min-width: 768px) {

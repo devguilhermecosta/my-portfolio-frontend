@@ -1,5 +1,7 @@
 import MainContainer from "../../../components/mainContainer";
 import Input from "../../../components/input";
+import TextArea from "../../../components/textarea";
+import Cover from "../../../components/cover";
 import { ChangeEvent, FormEvent, useState, useContext } from "react";
 import { AiOutlineUpload } from "react-icons/ai";
 import SubmitInput from "../../../components/submitInput";
@@ -123,17 +125,13 @@ export default function NewWork(): JSX.Element {
           onChange={(e) => {setTitle(e.target.value)}} 
           error={titleError}
         />
-  
-        <div className={Style.C_work_c_textarea}>
-          <label htmlFor="description">description:</label>
-          <textarea
-            name="description"
-            id="description"
-            value={description}
-            onChange={(e) => {setDescription(e.target.value)}}
-            style={{ border: descriptionError ? borderError : 'none' }}
-          />
-        </div>
+
+        <TextArea 
+          label="description"
+          value={description}
+          error={descriptionError}
+          onChange={(e) => setDescription(e.target.value)}
+        />
   
         <Input 
           labelName="link" 
@@ -163,7 +161,9 @@ export default function NewWork(): JSX.Element {
           />
         </div>
         
-        {cover && (<img src={coverUrl} alt="coverimage" className={Style.Image_preview}/>)}
+        { cover && (
+          <Cover coverUrl={coverUrl} alt='workcover'/>
+        )}
 
         <SubmitInput />
         

@@ -2,7 +2,7 @@ import { ChangeEvent } from "react";
 
 interface InputProps {
   labelName: string;
-  value: string;
+  value?: string;
   error?: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
@@ -28,7 +28,7 @@ export default function Input({ ...props }: InputProps): JSX.Element {
         type="text"
         id={props.labelName}
         name={props.labelName}
-        value={props.value}
+        value={props.value ? props.value : ''}
         onChange={(e) => {props.onChange(e)}}
         style={{
           display: 'block',

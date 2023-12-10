@@ -32,5 +32,8 @@ export const handlers = [
   }),
   http.post(`${baseUrl}/work/api/images/create/`, () => {
     return new HttpResponse(null, { status: 400 });
+  }),
+  http.get(`${baseUrl}/work/api/:slug/`, () => {
+    return new HttpResponse(null, { status: 404 })
   })
 ]
