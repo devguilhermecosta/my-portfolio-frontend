@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext, ChangeEvent, FormEvent } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { api, baseUrl } from '../../../utils/api';
 import { WorkProps } from '../../../interfaces/work';
 import MainContainer from '../../../components/mainContainer';
@@ -12,11 +12,14 @@ import UploadInput from '../../../components/uploadInput';
 import SubmitInput from '../../../components/submitInput';
 import { AuthContext } from '../../../contexts/authContext';
 import toast from 'react-hot-toast';
+import BackButton from '../../../components/backButton';
 
 export default function WorkDetail(): JSX.Element {
   const [work, setWork] = useState<WorkProps | undefined>();
+
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const navigate = useNavigate();
 
   const { slug } = useParams();
   const { user } = useContext(AuthContext);
@@ -121,6 +124,8 @@ export default function WorkDetail(): JSX.Element {
 
   return (
     <MainContainer>
+
+      <BackButton onClick={() => navigate('/admin/dashboard/works', { replace: true })}/>
 
       {saving && <Loading />}
 

@@ -4,10 +4,19 @@ import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { server } from '../../../../utils/mocks/node';
 import { http, HttpResponse } from 'msw';
+import { BrowserRouter } from 'react-router-dom';
 import { baseUrl } from '../../../../utils/api';
 import WorkDetail from '..';
 
 const globalURL = global.URL.createObjectURL = vi.fn();
+
+const renderWorkDetail = () => {
+  return render(
+    <BrowserRouter>
+      <WorkDetail />
+    </BrowserRouter>
+  )
+}
 
 describe('<WorkDetail />', () => {
   it('should return page not found if work not found', async () => {
@@ -17,7 +26,7 @@ describe('<WorkDetail />', () => {
       })
     )
 
-    render(<WorkDetail />);
+    renderWorkDetail();
 
     await screen.findByText('page not found');
   });
@@ -35,12 +44,34 @@ describe('<WorkDetail />', () => {
       })
     )
 
-    render(<WorkDetail />);
+    renderWorkDetail();
 
     await screen.findByDisplayValue('work title');
     await screen.findByDisplayValue('work description');
     await screen.findByDisplayValue('https://my-work.com');
     await screen.findByAltText(/image of work title/i);
+  });
+
+  it('should navigate to works page on button click', async () => {
+    server.use(
+      http.get(`${baseUrl}/work/api/:slug/`, () => {
+        return HttpResponse.json({
+          id: 1,
+          title: 'work title',
+          description: 'work description',
+          link: 'https://my-work.com',
+          cover: 'work cover'
+        }, { status: 200 })
+      })
+    )
+
+    const user = userEvent.setup();
+    renderWorkDetail();
+
+    const backButton = await screen.findByTestId('backButton');
+    await user.click(backButton);
+
+    expect(window.location.href).toContain('admin/dashboard/works');
   });
 
   it('should change the field data', async () => {
@@ -67,7 +98,7 @@ describe('<WorkDetail />', () => {
 
     const user = userEvent.setup();
 
-    render(<WorkDetail />);
+    renderWorkDetail();
 
     // get all fields
     const title = await screen.findByDisplayValue('work title');
@@ -120,7 +151,7 @@ describe('<WorkDetail />', () => {
 
     const user = userEvent.setup();
 
-    render(<WorkDetail />);
+    renderWorkDetail();
 
     const submitInput = await screen.findByDisplayValue(/save/);
     const spy = vi.spyOn(console, 'error');
@@ -152,7 +183,7 @@ describe('<WorkDetail />', () => {
 
     const user = userEvent.setup();
     const borderError = '2px solid red';
-    render(<WorkDetail />);
+    renderWorkDetail();
 
     const title = await screen.findByLabelText(/title/i);
     const description = await screen.findByLabelText(/description/i);
@@ -192,7 +223,7 @@ describe('<WorkDetail />', () => {
     )
 
     const user = userEvent.setup();
-    render(<WorkDetail />);
+    renderWorkDetail();
 
     const submitInput = await screen.findByDisplayValue(/save/);
     const spy = vi.spyOn(console, 'log');
@@ -228,7 +259,7 @@ describe('<WorkDetail />', () => {
     }
 
     const user = userEvent.setup();
-    render(<WorkDetail />);
+    renderWorkDetail();
 
     // get all fields
     const title = await screen.findByDisplayValue('work title');
