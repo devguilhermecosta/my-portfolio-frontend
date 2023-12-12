@@ -186,5 +186,3 @@ export default function WorkDetail(): JSX.Element {
   </MainContainer>
   )
 }
-
-//TODO add a button to return to works page
