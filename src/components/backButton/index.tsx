@@ -5,7 +5,8 @@ interface ButtonProps {
 
 export default function BackButton({ ...props }: ButtonProps): JSX.Element {
   return (
-    <button 
+    <button
+      data-testid='backButton' 
       onClick={props.onClick}
       style={{
         backgroundColor: 'var(--contrast-l1)',
