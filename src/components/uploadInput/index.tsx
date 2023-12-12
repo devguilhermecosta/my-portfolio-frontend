@@ -1,15 +1,15 @@
 import { AiOutlineUpload } from "react-icons/ai";
 import Style from './uploadInput.module.css';
-import { ChangeEvent } from "react";
+import { ChangeEvent, CSSProperties } from "react";
 
-interface UploadProps {
+interface UploadProps extends CSSProperties {
   multiple?: boolean;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function UploadInput({ ...props }: UploadProps): JSX.Element {
   return (
-    <div className={Style.C_custom_input}>
+    <div className={Style.C_custom_input} style={{ ...props }}>
       <AiOutlineUpload 
         id="strokeCover" 
         size={100} 
