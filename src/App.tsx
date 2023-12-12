@@ -6,8 +6,13 @@ import Works from './pages/works';
 import PrivateRoute from './components/privateRoute';
 import NewWork from './pages/works/new';
 import WorkDetail from './pages/works/details';
+import Home from './pages/home';
 
 export const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Home />
+  },
   {
     path: 'admin/login',
     element: <LoginPage />
