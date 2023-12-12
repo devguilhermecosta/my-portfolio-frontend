@@ -16,6 +16,7 @@ import toast from 'react-hot-toast';
 export default function WorkDetail(): JSX.Element {
   const [work, setWork] = useState<WorkProps | undefined>();
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
   const { slug } = useParams();
   const { user } = useContext(AuthContext);
@@ -25,6 +26,8 @@ export default function WorkDetail(): JSX.Element {
   const [link, setLink] = useState('');
   const [cover, setCover] = useState<File | null>(null);
   const [coverUrl, setCoverUrl] = useState<string | null>(null);
+
+  const [titleControl, setTitleControl] = useState('');
 
   const [errorTitle, setErrorTitle] = useState('');
   const [errorDescription, setErrorDescription] = useState('');
@@ -81,6 +84,8 @@ export default function WorkDetail(): JSX.Element {
 
   async function handleSubmit(e: FormEvent<Element>): Promise<void> {
     e.preventDefault();
+    
+    setSaving(true);
 
     const config = {
       headers: {
@@ -90,7 +95,7 @@ export default function WorkDetail(): JSX.Element {
     }
 
     const formData = new FormData();
-    addFieldToFormData(formData, 'title', title, work?.title);
+    if (title !== titleControl) addFieldToFormData(formData, 'title', title, work?.title);
     addFieldToFormData(formData, 'description', description, work?.description);
     addFieldToFormData(formData, 'link', link, work?.link)
     if (cover) formData.append('cover', cover);
@@ -101,6 +106,7 @@ export default function WorkDetail(): JSX.Element {
       console.log(msg);
       toast.success(msg, { duration: 4000 });
       cleanErrorFields();
+      setTitleControl(title);
     })
     .catch((e) => {
       setErrorTitle(e.response.data?.title);
@@ -110,13 +116,17 @@ export default function WorkDetail(): JSX.Element {
       console.error(msg);
       toast.error(msg, { duration: 4000 });
     })
+    .finally(() => setSaving(false))
   }
 
   return (
     <MainContainer>
 
+      {saving && <Loading />}
+
     {work 
-    ? <form
+    ? 
+      <form
       encType='multipart/form-data'
         style={{ width: '100%', maxWidth: '840px' }}
       >
