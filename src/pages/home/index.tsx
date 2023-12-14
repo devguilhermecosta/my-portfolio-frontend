@@ -6,11 +6,53 @@ import hand from '../../utils/images/Hand.png';
 import CallMeButton from "../../components/callMeButton";
 import SpaceSection from "../../components/spaceSection";
 import Carousel from "../../components/carousel";
+import { useState } from "react";
+import whatsapp from '../../utils/images/whatsapp.png';
+import gmail from '../../utils/images/gmail.png';
+import phone from '../../utils/images/phone.png';
+import ButtonContact from "../../components/buttonContact";
 
 export default function Home(): JSX.Element {
+  const [openContact, setOpenContact] = useState(false);
+  const [closeContact, setCloseContact] = useState(false);
 
   return(
     <MainContainer paddingTop='8px' overflow="hidden">
+      {/* CONTACT */}
+      {openContact && (
+        <section 
+          className={`${Style.C_contact} ${openContact ? Style.Open_contact : ''} ${ closeContact ? Style.Close_contact : '' }`} 
+          onClick={() => {
+            setCloseContact(true);
+            setTimeout(() => setOpenContact(false), 750);
+          }
+        }>
+          <section className={Style.C_all_contacts}>
+            <ButtonContact 
+              text="whatsapp" 
+              image={whatsapp} 
+              backgroundColor="#4AB743" 
+              color="var(--secondaire-std)"
+              href="/"
+            />
+            <ButtonContact 
+              text="email" 
+              image={gmail} 
+              backgroundColor='var(--secondaire-l1)' 
+              color="var(--primary-std)"
+              href="/"
+            />
+            <ButtonContact 
+              text="phone" 
+              image={phone} 
+              backgroundColor='var(--contrast-std)' 
+              color='var(--secondaire-std)'
+              href="/"
+            />
+          </section>
+        </section>
+      )}
+
       {/* MENU */}
       <header className={Style.C_header}>
         <ul className={Style.C_header__ul}>
@@ -42,7 +84,11 @@ export default function Home(): JSX.Element {
   
       {/* CTA */}
       <SpaceSection>
-        <CallMeButton />
+        <CallMeButton onClick={() => {
+          setOpenContact(true); 
+          setCloseContact(false);
+        }}
+        />
       </SpaceSection>
 
       {/* LINE */}
@@ -160,11 +206,12 @@ export default function Home(): JSX.Element {
 
       {/* CTA */}
       <SpaceSection>
-        <CallMeButton text="você pode me chamar aqui"/>
+        <CallMeButton text="você pode me chamar aqui" onClick={() => {
+          setOpenContact(true); 
+          setCloseContact(false);
+        }}/>
       </SpaceSection>
 
     </MainContainer>
   )
 }
-
-//TODO add comments at the top of each element to identify them

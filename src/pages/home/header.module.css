@@ -114,6 +114,52 @@
   object-fit: cover;
 }
 
+.C_contact {
+  position: fixed;
+  top: -1000px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100vw;
+  height: 120vh;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.C_all_contacts {
+  width: 100%;
+  max-width: 600px;
+  padding: 23px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  row-gap: 20px;
+  background-color: var(--primary-std);
+  border: 1px solid var(--primary-l1);
+}
+
+.Open_contact{
+  animation: open_contact 750ms ease forwards !important;
+}
+
+.Close_contact {
+  animation: close_contact 750ms ease forwards !important;
+}
+
+@keyframes open_contact {
+  0% { top: -500px }
+  50% { top: 55% }
+  100% { top: 50% }
+}
+
+@keyframes close_contact {
+  0% { top: 50% }
+  50% { top: 55% }
+  100% { top: -500px }
+}
+
 @media screen and (min-width: 200px) {
   .C_header__ul a {
     font-size: 14px;
