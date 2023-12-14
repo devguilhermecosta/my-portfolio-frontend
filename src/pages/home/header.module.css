@@ -62,16 +62,6 @@
   font-size: 12px;
 }
 
-.C_services {
-  width: 100%;
-  overflow-x: scroll;
-  white-space: nowrap;
-}
-
-.C_services::-webkit-scrollbar {
-  display: none;
-}
-
 .C_Service {
   background-color: var(--primary-l1);
   padding: 10px 5px;
@@ -106,6 +96,22 @@
   background-color: var(--primary-l1);
   border-radius: 50%;
   margin: 0 auto;
+}
+
+.C_work {
+  width: 250px;
+  height: 200px;
+  display: inline-block;
+}
+
+.C_work:not(:last-child) {
+  margin-right: 10px;
+}
+
+.C_work img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 @media screen and (min-width: 200px) {
@@ -173,5 +179,10 @@
 
   .C_sub_title > p {
     font-size: 25px;
+  }
+
+  .C_works_work {
+    width: 300px;
+    height: 250px;
   }
 }

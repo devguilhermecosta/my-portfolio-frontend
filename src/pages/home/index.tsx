@@ -5,8 +5,10 @@ import imageProfile from '../../utils/images/profile.jpg';
 import hand from '../../utils/images/Hand.png';
 import CallMeButton from "../../components/callMeButton";
 import SpaceSection from "../../components/spaceSection";
+import Carousel from "../../components/carousel";
 
 export default function Home(): JSX.Element {
+
   return(
     <MainContainer paddingTop='8px' overflow="hidden">
       <header className={Style.C_header}>
@@ -51,7 +53,7 @@ export default function Home(): JSX.Element {
       </SpaceSection>
 
       <SpaceSection>
-        <section className={Style.C_services}>
+        <Carousel>
           <div className={Style.C_Service}>
             <h2>Prototipagem</h2>
             <p>
@@ -86,7 +88,7 @@ export default function Home(): JSX.Element {
               modernas e aprovadas pelo mercado.
             </p>
           </div>
-        </section>
+        </Carousel>
       </SpaceSection>
 
       <SpaceSection>
@@ -97,6 +99,46 @@ export default function Home(): JSX.Element {
         <section className={Style.C_title}>
           <p>Conheça alguns dos meus trabalhos</p>
         </section>
+      </SpaceSection>
+
+      <SpaceSection>
+        <Carousel>
+          <div className={Style.C_work}>
+            <Link to='/'>
+              <img src="https://picsum.photos/200/300?random=1" alt="" />
+            </Link>
+          </div>
+
+          <div className={Style.C_work}>
+            <Link to='/'>
+              <img src="https://picsum.photos/200/300?random=2" alt="" />
+            </Link>
+          </div>
+
+          <div className={Style.C_work}>
+            <Link to='/'>
+              <img src="https://picsum.photos/200/300?random=3" alt="" />
+            </Link>
+          </div>
+
+          <div className={Style.C_work}>
+            <Link to='/'>
+              <img src="https://picsum.photos/200/300?random=4" alt="" />
+            </Link>
+          </div>
+
+          <div className={Style.C_work}>
+            <Link to='/'>
+              <img src="https://picsum.photos/200/300?random=5" alt="" />
+            </Link>
+          </div>
+          
+          <div className={Style.C_work}>
+            <Link to='/'>
+              <img src="https://picsum.photos/200/300?random=6" alt="" />
+            </Link>
+          </div>
+        </Carousel>
       </SpaceSection>
 
     </MainContainer>
