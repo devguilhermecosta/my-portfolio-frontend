@@ -1,0 +1,7 @@
+.C_carousel {
+  width: 100%;
+  max-width: 980px;
+  white-space: nowrap;
+  margin: 0 auto;
+  overflow: hidden;
+}
