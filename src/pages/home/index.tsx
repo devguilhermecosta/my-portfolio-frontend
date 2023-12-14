@@ -11,6 +11,7 @@ export default function Home(): JSX.Element {
 
   return(
     <MainContainer paddingTop='8px' overflow="hidden">
+      {/* MENU */}
       <header className={Style.C_header}>
         <ul className={Style.C_header__ul}>
           <li><Link to='/'>instagram</Link></li>
@@ -19,6 +20,7 @@ export default function Home(): JSX.Element {
         </ul>
       </header>
 
+      {/* PROFILE */}
       <section className={Style.C_profile}>
         <div className={Style.C_profile_c_image}>
           <img src={imageProfile} alt="image of profile"/>
@@ -29,6 +31,7 @@ export default function Home(): JSX.Element {
         </div>
       </section>
 
+      {/* TEXT INTRO */}
       <SpaceSection>
         <section className={Style.C_title}>
           <p>Construir, desenvolver e escalar.</p>
@@ -37,14 +40,17 @@ export default function Home(): JSX.Element {
         </section>
       </SpaceSection>
   
+      {/* CTA */}
       <SpaceSection>
         <CallMeButton />
       </SpaceSection>
 
+      {/* LINE */}
       <SpaceSection>
         <span className={Style.Break_row}/>
       </SpaceSection>
 
+      {/* SUBTITLE */}
       <SpaceSection>
         <section className={Style.C_sub_title}>
           <p>Contribuindo com idéias e</p>
@@ -52,6 +58,7 @@ export default function Home(): JSX.Element {
         </section>
       </SpaceSection>
 
+      {/* SERVICES */}
       <SpaceSection>
         <Carousel>
           <div className={Style.C_Service}>
@@ -91,16 +98,19 @@ export default function Home(): JSX.Element {
         </Carousel>
       </SpaceSection>
 
+      {/* LINE */}
       <SpaceSection>
         <span className={Style.Break_row}/>
       </SpaceSection>
 
+      {/* SUBTITLE */}
       <SpaceSection>
         <section className={Style.C_title}>
           <p>Conheça alguns dos meus trabalhos</p>
         </section>
       </SpaceSection>
 
+      {/* WORKS */}
       <SpaceSection>
         <Carousel>
           <div className={Style.C_work}>
@@ -141,12 +151,14 @@ export default function Home(): JSX.Element {
         </Carousel>
       </SpaceSection>
 
+      {/* SUBTITLE */}
       <SpaceSection>
         <section className={Style.C_title}>
           <p>Vamos conversar sobre seu próximo projeto?</p>
         </section>
       </SpaceSection>
 
+      {/* CTA */}
       <SpaceSection>
         <CallMeButton text="você pode me chamar aqui"/>
       </SpaceSection>
