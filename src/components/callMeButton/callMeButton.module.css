@@ -1,0 +1,16 @@
+.C_button {
+  width: 100%;
+  max-width: 400px;
+  padding: 10px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: 4px;
+  background-color: var(--contrast-std);
+  color: var(--secondaire-std);
+  transition: background-color 300ms ease;
+}
+
+.C_button:hover {
+  background-color: var(--contrast-l1);
+}
