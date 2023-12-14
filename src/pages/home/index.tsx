@@ -4,10 +4,11 @@ import Style from './header.module.css';
 import imageProfile from '../../utils/images/profile.jpg';
 import hand from '../../utils/images/Hand.png';
 import CallMeButton from "../../components/callMeButton";
+import SpaceSection from "../../components/spaceSection";
 
 export default function Home(): JSX.Element {
   return(
-    <MainContainer paddingTop='8px'>
+    <MainContainer paddingTop='8px' overflow="hidden">
       <header className={Style.C_header}>
         <ul className={Style.C_header__ul}>
           <li><Link to='/'>instagram</Link></li>
@@ -26,24 +27,80 @@ export default function Home(): JSX.Element {
         </div>
       </section>
 
-      <section className={Style.C_title}>
-        <p>Construir, desenvolver e escalar.</p>
-        <p>Soluções digitais personalizadas </p>
-        <p>para suas necessidades.</p>
-      </section>
+      <SpaceSection>
+        <section className={Style.C_title}>
+          <p>Construir, desenvolver e escalar.</p>
+          <p>Soluções digitais personalizadas </p>
+          <p>para suas necessidades.</p>
+        </section>
+      </SpaceSection>
+  
+      <SpaceSection>
+        <CallMeButton />
+      </SpaceSection>
 
-      <CallMeButton marginTop='45px'/>
+      <SpaceSection>
+        <span className={Style.Break_row}/>
+      </SpaceSection>
 
-      <span style={{
-        display: 'block',
-        width: 'calc(100vw - 50%)',
-        height: '1.5px',
-        backgroundColor: 'var(--primary-l1)',
-        marginTop: '45px',
-        borderRadius: '50%',
-      }}/>
+      <SpaceSection>
+        <section className={Style.C_sub_title}>
+          <p>Contribuindo com idéias e</p>
+          <p>resultados impactantes.</p>
+        </section>
+      </SpaceSection>
+
+      <SpaceSection>
+        <section className={Style.C_services}>
+          <div className={Style.C_Service}>
+            <h2>Prototipagem</h2>
+            <p>
+              Criação de protótipos avançados de sites 
+              e aplicativos para você testar e aprovar 
+              antes do desenvolvimento definitivo.
+            </p>
+          </div>
+
+          <div className={Style.C_Service}>
+            <h2>UI/UX</h2>
+            <p>
+              Interfaces de usuário com design limpo e 
+              objetivo, gerando alto engajamento e tornando 
+              a experiência do usuário mais imersiva e gratificante.
+            </p>
+          </div>
+
+          <div className={Style.C_Service}>
+            <h2>Sistemas Web</h2>
+            <p>
+              Muito mais do que um site, um softwares online 
+              capaz de alavancar os resultados do seu negócio.
+            </p>
+          </div>
+
+          <div className={Style.C_Service}>
+            <h2>Desenvolvimento</h2>
+            <p>
+              Técnologias seguras e escaláveis, independente do 
+              tamanho da sua necessidade, usando ferramentas 
+              modernas e aprovadas pelo mercado.
+            </p>
+          </div>
+        </section>
+      </SpaceSection>
+
+      <SpaceSection>
+        <span className={Style.Break_row}/>
+      </SpaceSection>
+
+      <SpaceSection>
+        <section className={Style.C_title}>
+          <p>Conheça alguns dos meus trabalhos</p>
+        </section>
+      </SpaceSection>
+
     </MainContainer>
   )
 }
 
-//TODO create the media queries for the elements space
+//TODO add comments at the top of each element to identify them

@@ -55,12 +55,57 @@
 }
 
 .C_title {
-  margin: 45px auto 0 auto;
   text-align: center;
 }
 
 .C_title > p {
   font-size: 12px;
+}
+
+.C_services {
+  width: 100%;
+  overflow-x: scroll;
+  white-space: nowrap;
+}
+
+.C_services::-webkit-scrollbar {
+  display: none;
+}
+
+.C_Service {
+  background-color: var(--primary-l1);
+  padding: 10px 5px;
+  display: inline-flex;
+  flex-direction: column;
+  width: 230px;
+  min-height: 300px;
+  white-space: normal;
+}
+
+.C_Service:not(:last-child) {
+  margin-right: 8px;
+}
+
+.C_Service > h2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 130px;
+}
+
+.C_Service > p {
+  text-align: center;
+  min-height: 130px;
+}
+
+.Break_row {
+  display: block;
+  width: calc(100vw - 50%);
+  height: 1.5px;
+  background-color: var(--primary-l1);
+  border-radius: 50%;
+  margin: 0 auto;
 }
 
 @media screen and (min-width: 200px) {
@@ -108,14 +153,25 @@
     font-size: 16px;
   }
 
-  
   .C_title > p {
     font-size: 25px;
+  }
+
+  .C_sub_title > p {
+    font-size: 20px;
+  }
+
+  .C_Service:not(:last-child) {
+    margin-right: 20px;
   }
 }
 
 @media screen and (min-width: 768px) {
   .C_title > p {
     font-size: 31px;
+  }
+
+  .C_sub_title > p {
+    font-size: 25px;
   }
 }
