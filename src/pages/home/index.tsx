@@ -141,6 +141,16 @@ export default function Home(): JSX.Element {
         </Carousel>
       </SpaceSection>
 
+      <SpaceSection>
+        <section className={Style.C_title}>
+          <p>Vamos conversar sobre seu próximo projeto?</p>
+        </section>
+      </SpaceSection>
+
+      <SpaceSection>
+        <CallMeButton text="você pode me chamar aqui"/>
+      </SpaceSection>
+
     </MainContainer>
   )
 }
