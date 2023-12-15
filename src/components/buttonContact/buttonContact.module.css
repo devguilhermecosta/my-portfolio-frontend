@@ -5,8 +5,26 @@
   padding: 10px;
   border-radius: 50px;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   column-gap: 10px;
   text-decoration: none;
+}
+
+.Button > p {
+  font-size: 14px;
+  display: none;
+}
+
+@media screen and (min-width: 280px) {
+  .Button > p {
+    display: block;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .Button > p {
+    font-size: 16px;
+  }
 }

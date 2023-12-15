@@ -21,21 +21,21 @@ export default function ContactElement({ ctaText }: { ctaText?: string }): JSX.E
         }}>
           <section className={Style.C_all_contacts}>
             <ButtonContact 
-              text="whatsapp" 
+              text="(46 9 9908-3251)" 
               image={whatsapp} 
               backgroundColor="#4AB743" 
               color="var(--secondaire-std)"
               href="/"
             />
             <ButtonContact 
-              text="email" 
+              text="guilherme.partic@gmail.com" 
               image={gmail} 
               backgroundColor='var(--secondaire-l1)' 
               color="var(--primary-std)"
               href="/"
             />
             <ButtonContact 
-              text="phone" 
+              text="(46 9 9908-3251)" 
               image={phone} 
               backgroundColor='var(--contrast-std)' 
               color='var(--secondaire-std)'

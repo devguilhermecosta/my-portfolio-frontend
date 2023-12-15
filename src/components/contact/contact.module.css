@@ -5,6 +5,7 @@
   transform: translate(-50%, -50%);
   width: 100vw;
   height: 120vh;
+  margin: 0 5px;
   background-color: transparent;
   display: flex;
   justify-content: center;

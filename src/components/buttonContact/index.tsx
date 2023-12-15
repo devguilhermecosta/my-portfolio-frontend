@@ -21,8 +21,8 @@ export default function ButtonContact({ ...props }: ButtonProps): JSX.Element {{
         color: `${ props.color }`,
       }}
     >
-    <img src={props.image} alt={`logo of ${props.text}`} style={{ width: '30px', height: '30px' }} />
-    <p>{props.text}</p>
-  </Link>
+      <img src={props.image} alt={`logo of ${props.text}`} style={{ width: '30px', height: '30px' }} />
+      <p>{props.text}</p>
+    </Link>
   )
 }}
