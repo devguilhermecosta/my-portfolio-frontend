@@ -1,14 +1,30 @@
 import Style from './contact.module.css';
 import { useState } from "react";
 import ButtonContact from "../buttonContact";
-import whatsapp from '../../utils/images/whatsapp.png'
-import gmail from '../../utils/images/gmail.png';
-import phone from '../../utils/images/phone.png';
+import whatsappLogo from '../../utils/images/whatsapp.png'
+import gmailLogo from '../../utils/images/gmail.png';
+import phoneLogo from '../../utils/images/phone.png';
 import CallMeButton from '../callMeButton';
+import { api } from '../../utils/api';
 
 export default function ContactElement({ ctaText }: { ctaText?: string }): JSX.Element {
   const [openContact, setOpenContact] = useState(false);
   const [closeContact, setCloseContact] = useState(false);
+
+  const [whatsappNumber, setWhatsappNumer] = useState('46999083251');
+  const [phoneNumber, setPhoneNumber] = useState('(46) 9 9908-3251');
+  const [email, setEmail] = useState('guilherme.partic@gmail.com');
+
+  async function getContact() {
+    await api.get('/networks/api/v1/')
+    .then(r => {
+      const whatsapp: string = r.data.whatsapp;
+      setWhatsappNumer(whatsapp.replace(/[^0-9]/g, ''));
+      setPhoneNumber(r.data.phone);
+      setEmail(r.data.email)
+    })
+    .catch(() => {})
+  }
 
   return (
     <>
@@ -21,22 +37,24 @@ export default function ContactElement({ ctaText }: { ctaText?: string }): JSX.E
         }}>
           <section className={Style.C_all_contacts}>
             <ButtonContact 
-              text="(46 9 9908-3251)" 
-              image={whatsapp} 
+              target='_blank'
+              text='me chama lá no whats' 
+              image={whatsappLogo} 
               backgroundColor="var(--whatsapp-std)" 
               color="var(--secondaire-std)"
-              href="/"
+              href={`https://wa.me/${whatsappNumber}?text=Olá Guilherme`}
+              testId={whatsappNumber}
             />
             <ButtonContact 
-              text="guilherme.partic@gmail.com" 
-              image={gmail} 
+              text={email}
+              image={gmailLogo} 
               backgroundColor='var(--secondaire-l1)' 
               color="var(--primary-std)"
               href="/"
             />
             <ButtonContact 
-              text="(46 9 9908-3251)" 
-              image={phone} 
+              text={phoneNumber}
+              image={phoneLogo} 
               backgroundColor='var(--contrast-std)' 
               color='var(--secondaire-std)'
               href="/"
@@ -46,6 +64,7 @@ export default function ContactElement({ ctaText }: { ctaText?: string }): JSX.E
       )}
       
       <CallMeButton text={ctaText} onClick={() => {
+        getContact();
         setOpenContact(true);
         setCloseContact(false);
       }}/>
