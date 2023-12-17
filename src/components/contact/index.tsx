@@ -23,7 +23,7 @@ export default function ContactElement({ ctaText }: { ctaText?: string }): JSX.E
             <ButtonContact 
               text="(46 9 9908-3251)" 
               image={whatsapp} 
-              backgroundColor="#4AB743" 
+              backgroundColor="var(--whatsapp-std)" 
               color="var(--secondaire-std)"
               href="/"
             />
