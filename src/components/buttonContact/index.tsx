@@ -8,6 +8,7 @@ interface ButtonProps {
   color: string;
   href: string;
   target?: string;
+  testId?: string;
 }
 
 export default function ButtonContact({ ...props }: ButtonProps): JSX.Element {{
@@ -20,6 +21,7 @@ export default function ButtonContact({ ...props }: ButtonProps): JSX.Element {{
         backgroundColor: `${ props.backgroundColor }`,
         color: `${ props.color }`,
       }}
+      data-testid={props.testId}
     >
       <img src={props.image} alt={`logo of ${props.text}`} style={{ width: '30px', height: '30px' }} />
       <p>{props.text}</p>
