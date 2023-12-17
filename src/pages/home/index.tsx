@@ -166,3 +166,6 @@ export default function Home(): JSX.Element {
     </MainContainer>
   )
 }
+
+// TODO - add the link to networks
+// TODO - add the get api to works
