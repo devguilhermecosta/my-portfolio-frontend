@@ -7,11 +7,16 @@ import PrivateRoute from './components/privateRoute';
 import NewWork from './pages/works/new';
 import WorkDetail from './pages/works/details';
 import Home from './pages/home';
+import HomeWorkDetail from './pages/home/works/workDetail';
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <Home />
+  },
+  {
+    path: '/work/:slug',
+    element: <HomeWorkDetail />
   },
   {
     path: 'admin/login',

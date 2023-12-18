@@ -3,7 +3,7 @@ import Style from './carousel.module.css';
 
 interface CarouselProps {
   children: ReactNode;
-  style?: CSSProperties
+  style?: CSSProperties;
 }
 
 export default function Carousel({ children, style }: CarouselProps): JSX.Element {
@@ -50,7 +50,7 @@ export default function Carousel({ children, style }: CarouselProps): JSX.Elemen
   }
 
   return(
-    <section 
+    <section
       ref={carouselRef}
       className={Style.C_carousel}
       style={style}

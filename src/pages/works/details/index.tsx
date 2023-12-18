@@ -186,3 +186,5 @@ export default function WorkDetail(): JSX.Element {
   </MainContainer>
   )
 }
+
+// TODO - to create the patch to work images
