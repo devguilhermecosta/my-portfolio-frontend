@@ -22,7 +22,7 @@ export default function Home(): JSX.Element {
 
   useEffect(() => {
     async function getNetworks() {
-      await api.get('/networks/api/v1')
+      await api.get('/networks/api/v1/')
       .then(r => setNetworks(r.data));
     }
 
