@@ -1,0 +1,126 @@
+.C_work_main {
+  width: 100%;
+}
+
+.C_work {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: stretch;
+  row-gap: 20px;
+}
+
+.C_work_details {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: stretch;
+  row-gap: 20px;
+}
+
+.C_work_title {
+  font-size: 18px;
+}
+
+.C_work_title::first-letter {
+  text-transform: uppercase;
+}
+
+.C_work_description {
+  text-align: justify;
+}
+
+.C_work_link {
+  text-decoration: none;
+  color: var(--secondaire-std);
+}
+
+.C_work_c_cover {
+  width: 100%;
+  max-width: 350px;
+  height: 250px;
+  position: relative;
+}
+
+.C_work_c_cover > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.C_work_expand {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  color: var(--secondaire-std);
+  background-color: rgba(0, 0, 0, 25%);
+  padding: 5px;
+  cursor: pointer;
+}
+
+.C_work_c_image {
+  width: 100%;
+  max-width: 200px;
+  height: 120px;
+  max-width: 180px;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.C_work_c_image:not(:last-child) {
+  margin-right: 10px;
+}
+
+.C_work_c_image > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.C_modal {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: open-modal-control 300ms ease forwards;
+}
+
+.C_modal_c_image {
+  width: 0;
+  height: 0;
+  background-color: transparent;
+  animation: open-modal 300ms ease forwards;
+}
+
+.C_modal_c_image > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+@keyframes open-modal-control {
+  to { background-color: rgba(0, 0, 0, 90%); }
+}
+
+@keyframes open-modal {
+  from { width: 0; height: 0; }
+  to {
+    width: 90vw;
+    height: 90vh;
+  }
+}
