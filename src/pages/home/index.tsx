@@ -6,17 +6,44 @@ import hand from '../../utils/images/Hand.png';
 import SpaceSection from "../../components/spaceSection";
 import Carousel from "../../components/carousel";
 import ContactElement from "../../components/contact";
+import { useEffect, useState } from "react";
+import { api, baseUrl } from "../../utils/api";
+import { WorkProps } from '../../interfaces/work';
+
+interface NetworksProps {
+  instagram: string;
+  linkedin: string;
+  github: string;
+}
 
 export default function Home(): JSX.Element {
+  const [networks, setNetworks] = useState<NetworksProps>();
+  const [works, setWorks] = useState<WorkProps[]>([]);
+
+  useEffect(() => {
+    async function getNetworks() {
+      await api.get('/networks/api/v1')
+      .then(r => setNetworks(r.data));
+    }
+
+    async function getWorks() {
+      await api.get('/work/api/list/')
+      .then(r => setWorks(r.data))
+    }
+
+    getNetworks();
+    getWorks();
+
+  }, [])
   
   return(
     <MainContainer paddingTop='8px' overflow="hidden">
       {/* MENU */}
       <header className={Style.C_header}>
         <ul className={Style.C_header__ul}>
-          <li><Link to='/'>instagram</Link></li>
-          <li><Link to='/'>linkedin</Link></li>
-          <li><Link to='/'>gitHub</Link></li>
+          <li><Link target="_blanck" to={`${networks?.instagram}`}>instagram</Link></li>
+          <li><Link target="_blanck" to={`${networks?.linkedin}`}>linkedin</Link></li>
+          <li><Link target="_blanck" to={`${networks?.github}`}>gitHub</Link></li>
         </ul>
       </header>
 
@@ -113,41 +140,13 @@ export default function Home(): JSX.Element {
       {/* WORKS */}
       <SpaceSection>
         <Carousel>
-          <div className={Style.C_work}>
-            <Link to='/'>
-              <img src="https://picsum.photos/200/300?random=1" alt="" />
-            </Link>
-          </div>
-
-          <div className={Style.C_work}>
-            <Link to='/'>
-              <img src="https://picsum.photos/200/300?random=2" alt="" />
-            </Link>
-          </div>
-
-          <div className={Style.C_work}>
-            <Link to='/'>
-              <img src="https://picsum.photos/200/300?random=3" alt="" />
-            </Link>
-          </div>
-
-          <div className={Style.C_work}>
-            <Link to='/'>
-              <img src="https://picsum.photos/200/300?random=4" alt="" />
-            </Link>
-          </div>
-
-          <div className={Style.C_work}>
-            <Link to='/'>
-              <img src="https://picsum.photos/200/300?random=5" alt="" />
-            </Link>
-          </div>
-          
-          <div className={Style.C_work}>
-            <Link to='/'>
-              <img src="https://picsum.photos/200/300?random=6" alt="" />
-            </Link>
-          </div>
+          {works && works.map(work => (
+            <div key={work.id} className={Style.C_work}>
+              <Link to={`work/${work.slug}`}>
+                <img src={`${baseUrl}/${work.cover}`} alt={`image of ${work.title}`} />
+              </Link>
+            </div>
+          ))}
         </Carousel>
       </SpaceSection>
 
@@ -166,6 +165,3 @@ export default function Home(): JSX.Element {
     </MainContainer>
   )
 }
-
-// TODO - add the link to networks
-// TODO - add the get api to works
