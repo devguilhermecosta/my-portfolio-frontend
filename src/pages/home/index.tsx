@@ -1,6 +1,6 @@
 import MainContainer from "../../components/mainContainer";
 import { Link } from "react-router-dom";
-import Style from './header.module.css';
+import Style from './home.module.css';
 import imageProfile from '../../utils/images/profile.jpg';
 import hand from '../../utils/images/Hand.png';
 import SpaceSection from "../../components/spaceSection";
@@ -9,43 +9,25 @@ import ContactElement from "../../components/contact";
 import { useEffect, useState } from "react";
 import { api, baseUrl } from "../../utils/api";
 import { WorkProps } from '../../interfaces/work';
-
-interface NetworksProps {
-  instagram: string;
-  linkedin: string;
-  github: string;
-}
+import Header from "../../components/header";
 
 export default function Home(): JSX.Element {
-  const [networks, setNetworks] = useState<NetworksProps>();
   const [works, setWorks] = useState<WorkProps[]>([]);
 
   useEffect(() => {
-    async function getNetworks() {
-      await api.get('/networks/api/v1/')
-      .then(r => setNetworks(r.data));
-    }
-
     async function getWorks() {
       await api.get('/work/api/list/')
       .then(r => setWorks(r.data))
     }
 
-    getNetworks();
     getWorks();
 
   }, [])
   
   return(
     <MainContainer paddingTop='8px' overflow="hidden">
-      {/* MENU */}
-      <header className={Style.C_header}>
-        <ul className={Style.C_header__ul}>
-          <li><Link target="_blanck" to={`${networks?.instagram}`}>instagram</Link></li>
-          <li><Link target="_blanck" to={`${networks?.linkedin}`}>linkedin</Link></li>
-          <li><Link target="_blanck" to={`${networks?.github}`}>gitHub</Link></li>
-        </ul>
-      </header>
+
+      <Header />
 
       {/* PROFILE */}
       <section className={Style.C_profile}>
