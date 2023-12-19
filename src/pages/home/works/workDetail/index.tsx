@@ -10,6 +10,7 @@ import ContactElement from "../../../../components/contact";
 import { baseUrl } from "../../../../utils/api";
 import Carousel from '../../../../components/carousel';
 import { BsArrowsAngleExpand } from "react-icons/bs";
+import Header from '../../../../components/header';
 
 export default function HomeWorkDetail(): JSX.Element {
   const navigate = useNavigate();
@@ -43,12 +44,14 @@ export default function HomeWorkDetail(): JSX.Element {
   }
 
   return (
-    <MainContainer>
+    <MainContainer paddingTop='8px'>
       <BackButton onClick={() => navigate('/')}/>
+      <Header />
 
       {work 
       ? 
         <section className={Style.C_work_main}>
+
           <section className={Style.C_work}>
             <section className={Style.C_work_details}>
               <h1 className={Style.C_work_title}>{work.title}</h1>
@@ -61,34 +64,41 @@ export default function HomeWorkDetail(): JSX.Element {
                     Link do projeto: {work?.link}
                 </a>
               )}
-              <ContactElement ctaText="você pode me chamar aqui"/>
             </section>
 
-            <div className={Style.C_work_c_cover}>
-              <div className={Style.C_work_expand} onClick={() => setModalImage(image)}>
+            <section className={Style.C_work_c_cover}>
+              <div 
+                className={Style.C_work_expand} 
+                onClick={() => setModalImage(image)}>
                 <BsArrowsAngleExpand size={28} />
               </div>
-              <img src={image} alt={`image of ${work.title}`} />
-            </div>
-          </section>
-          
-          <Carousel style={{ marginTop: '20px' }}>
-            <div className={Style.C_work_c_image}>
-              <img 
-                src={baseUrl + work.cover} 
-                alt={`image of ${work.title}`}
-                onClick={() => setImage(baseUrl + work.cover)}/>
-            </div>
-            {work?.images && work?.images.map(image => (
-              <div 
-                key={image.id} 
-                className={Style.C_work_c_image}
-                onClick={() => setImage(baseUrl + image.url)}
-              >
-                <img src={`${baseUrl}${image.url}`} alt=""/>
+
+              <div className={Style.C_work_cover_img}>
+                <img src={image} alt={`image of ${work.title}`}/>
               </div>
-            ))}
-          </Carousel>
+
+              <Carousel style={{ marginTop: '20px' }}>
+                <div className={Style.C_work_c_image}>
+                  <img 
+                    src={baseUrl + work.cover} 
+                    alt={`image of ${work.title}`}
+                    onClick={() => setImage(baseUrl + work.cover)}
+                  />
+                </div>
+                {work?.images && work?.images.map(image => (
+                  <div 
+                    key={image.id} 
+                    className={Style.C_work_c_image}
+                    onClick={() => setImage(baseUrl + image.url)}
+                  >
+                    <img src={`${baseUrl}${image.url}`} alt=""/>
+                  </div>
+                ))}
+              </Carousel>
+            </section>
+          </section>
+
+          <ContactElement ctaText="você pode me chamar aqui" style={{ maxWidth: '840px' }}/>
 
           {modalImage && (
             <div className={Style.C_modal} onClick={() => setModalImage('')}>
@@ -97,7 +107,6 @@ export default function HomeWorkDetail(): JSX.Element {
               </div>
             </div>
           )}
-
         </section>
 
       : <h1>Page not found</h1>}
