@@ -37,6 +37,7 @@
 .C_work_link {
   text-decoration: none;
   color: var(--secondaire-std);
+  align-self: flex-start;
 }
 
 .C_work_c_cover {
@@ -122,5 +123,14 @@
   to {
     width: 90vw;
     height: 90vh;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .C_work {
+    flex-direction: row-reverse;  
+    align-items: flex-start;
+    column-gap: 20px;
+    max-width: 940px;
   }
 }
