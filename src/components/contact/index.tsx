@@ -6,8 +6,9 @@ import gmailLogo from '../../utils/images/gmail.png';
 import phoneLogo from '../../utils/images/phone.png';
 import CallMeButton from '../callMeButton';
 import { api } from '../../utils/api';
+import { CSSProperties } from 'react';
 
-export default function ContactElement({ ctaText }: { ctaText?: string }): JSX.Element {
+export default function ContactElement({ ctaText, style }: { ctaText?: string, style?: CSSProperties }): JSX.Element {
   const [openContact, setOpenContact] = useState(false);
   const [closeContact, setCloseContact] = useState(false);
 
@@ -63,7 +64,7 @@ export default function ContactElement({ ctaText }: { ctaText?: string }): JSX.E
         </section>
       )}
       
-      <CallMeButton text={ctaText} onClick={() => {
+      <CallMeButton text={ctaText} style={style} onClick={() => {
         getContact();
         setOpenContact(true);
         setCloseContact(false);
