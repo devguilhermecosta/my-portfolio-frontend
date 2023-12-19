@@ -1,0 +1,42 @@
+.C_header {
+  width: 100%;
+}
+
+.C_header__ul {
+  list-style-type: none;
+  display: flex;
+  column-gap: 15px;
+}
+
+.C_header__ul a {
+  color: var(--secondaire-std);
+  text-decoration: none;
+  text-transform: capitalize;
+  font-size: 12px;
+}
+
+@media screen and (min-width: 200px) {
+  .C_header__ul a {
+    font-size: 14px;
+  }
+}
+
+@media screen and (min-width: 470px) {
+  .C_header__ul {
+    justify-content: flex-end;
+    column-gap: 20px;
+  }
+
+  .C_header__ul li:not(:last-child)::after {
+    content: '/';
+    display: inline-block;
+    color: var(--secondaire-std);
+    margin-left: 20px;
+  }
+}
+ 
+@media screen and (min-width: 600px) {
+  .C_header__ul a {
+    font-size: 16px;
+  }
+}
