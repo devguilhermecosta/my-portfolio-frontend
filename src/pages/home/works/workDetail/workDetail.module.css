@@ -118,7 +118,7 @@
 }
 
 @keyframes open-modal-control {
-  to { background-color: rgba(0, 0, 0, 90%); }
+  to { background-color: rgba(0, 0, 0, 82%); }
 }
 
 @keyframes open-modal {
