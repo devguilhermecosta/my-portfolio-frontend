@@ -24,5 +24,3 @@ export default function TextArea({ label, value, error, onChange }: TextAreaProp
     </div>
   )
 }
-
-//TODO make all tests to thi component

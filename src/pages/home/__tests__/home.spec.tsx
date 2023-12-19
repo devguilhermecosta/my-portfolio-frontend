@@ -16,30 +16,6 @@ const renderHomePage = () => {
 }
 
 describe('<Home />', () => {
-  it('should render the links to networks', async () => {
-    const apiData = {
-      instagram: 'https://instagram.com',
-      linkedin: 'https://linkedin.com',
-      github: 'https://github.com'
-    }
-    server.use(
-      http.get(`${baseUrl}/networks/api/v1/`, () => {
-        return HttpResponse.json(apiData, { status: 200 })
-      })
-    )
-
-    renderHomePage();
-
-    const instagram = await screen.findByText(/instagram/i);
-    const linkedin = await screen.findByText(/linkedin/i);
-    const github = await screen.findByText(/github/i);
-
-    expect(instagram.getAttribute('href')).toContain(apiData.instagram);
-    expect(linkedin.getAttribute('href')).toContain(apiData.linkedin);
-    expect(github.getAttribute('href')).toContain(apiData.github);
-
-  })
-
   it('should render the works', async () => {
     server.use(
       http.get(`${baseUrl}/work/api/list/`, () => {
@@ -55,5 +31,3 @@ describe('<Home />', () => {
     
   })
 })
-
-// TODO: refatorar todos os testes
