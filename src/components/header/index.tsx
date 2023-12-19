@@ -32,3 +32,5 @@ export default function Header(): JSX.Element {
     </header>
   )
 }
+
+// TODO: to create all tests

@@ -55,3 +55,5 @@ describe('<Home />', () => {
     
   })
 })
+
+// TODO: refatorar todos os testes
