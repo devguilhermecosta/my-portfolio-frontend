@@ -9,7 +9,6 @@ import { api, baseUrl } from '../../utils/api';
 import toast from 'react-hot-toast';
 
 interface ImagesManagerProps {
-  WithBtnControl?: boolean;
   workId: number;
   user: string | null;
   callbackFn?: () => void;
@@ -20,9 +19,10 @@ interface ImageProps {
   url: string;
 }
 
-export default function ImagesWorkManager({ WithBtnControl, workId, user, callbackFn }: ImagesManagerProps): JSX.Element {
+export default function ImagesWorkManager({ workId, user, callbackFn }: ImagesManagerProps): JSX.Element {
   const [images, setImages] = useState<ImageProps[]>([]);
-  const [visible, setVisible] = useState(false);
+  const [openClicked, setOpenClicked] = useState(false);
+  const [closeClicked, setCloseClicked] = useState(false);
 
   function handleImages(e: ChangeEvent<HTMLInputElement>) {
     const receivedImages = e.target.files;
@@ -40,6 +40,9 @@ export default function ImagesWorkManager({ WithBtnControl, workId, user, callba
         setImages((images) => [...images, compositeImage]);
       }
     }
+
+    // clear the input value
+    e.target.value = '';
   }
 
   function handleDelete(imageDelete: ImageProps): void {
@@ -73,8 +76,9 @@ export default function ImagesWorkManager({ WithBtnControl, workId, user, callba
       })
     });
 
-    setVisible(false);
-    setImages([]);
+    setCloseClicked(true);
+    setOpenClicked(false);
+    setTimeout(() => setImages([]), 3000);
 
     /**
      * this must wait at least 1000ms to execute the function, 
@@ -85,7 +89,12 @@ export default function ImagesWorkManager({ WithBtnControl, workId, user, callba
 
   return (
       <>
-        <section data-testid="C_work_imgs" className={`${Style.C_work_images_manager} ${!visible ? Style.close_windows : ''}`}>
+        <section 
+          data-testid="C_work_imgs" 
+          className={
+            `${Style.C_work_images_manager} ${openClicked ? Style.show_animation : ''} ${closeClicked ? Style.close_animation : ''}`
+          }
+        >
 
           <IoCloseCircleSharp
             data-testid="close_button"
@@ -96,11 +105,15 @@ export default function ImagesWorkManager({ WithBtnControl, workId, user, callba
               right: 0, 
               cursor: 'pointer'
             }}
-            onClick={() => setVisible(false)}
+            onClick={() => {
+              setCloseClicked(true);
+              setOpenClicked(false);
+            }}
           />
 
           <h1>now, add some images</h1>
 
+          {/* o problema está aqui */}
           <UploadInput multiple={true} onChange={(e) => handleImages(e)}/>
 
           <section className={Style.C_work_images_grid}>
@@ -127,20 +140,21 @@ export default function ImagesWorkManager({ WithBtnControl, workId, user, callba
           )}
         </section>
 
-        {WithBtnControl && (
-          <div style={{ margin: '0 auto', width: '100%', textAlign: 'center' }}>
-            <FaPlus 
-              size={32}
-              style={{
-                backgroundColor: 'var(--whatsapp-std)',
-                padding: '5px',
-                borderRadius: '50%',
-                cursor: 'pointer',
-              }}
-              onClick={() => setVisible(!visible ? true : false)}
-            />
-          </div>
-        )}
-      </>
+        <div style={{ margin: '0 auto', width: '100%', textAlign: 'center' }}>
+          <FaPlus 
+            size={32}
+            style={{
+              backgroundColor: 'var(--whatsapp-std)',
+              padding: '5px',
+              borderRadius: '50%',
+              cursor: 'pointer',
+            }}
+            onClick={() => {
+              setOpenClicked(true);
+              setCloseClicked(false);
+            }}
+          />
+        </div>
+    </>
   )
 }
