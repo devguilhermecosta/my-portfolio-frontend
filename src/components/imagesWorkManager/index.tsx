@@ -11,6 +11,7 @@ import toast from 'react-hot-toast';
 interface ImagesManagerProps {
   workId: number;
   user: string | null;
+  testId?: string;
   callbackFn?: () => void;
 }
 
@@ -19,7 +20,7 @@ interface ImageProps {
   url: string;
 }
 
-export default function ImagesWorkManager({ workId, user, callbackFn }: ImagesManagerProps): JSX.Element {
+export default function ImagesWorkManager({ testId, workId, user, callbackFn }: ImagesManagerProps): JSX.Element {
   const [images, setImages] = useState<ImageProps[]>([]);
   const [openClicked, setOpenClicked] = useState(false);
   const [closeClicked, setCloseClicked] = useState(false);
@@ -114,7 +115,7 @@ export default function ImagesWorkManager({ workId, user, callbackFn }: ImagesMa
           <h1>now, add some images</h1>
 
           {/* o problema está aqui */}
-          <UploadInput multiple={true} onChange={(e) => handleImages(e)}/>
+          <UploadInput testId={testId} multiple={true} onChange={(e) => handleImages(e)}/>
 
           <section className={Style.C_work_images_grid}>
             {images.length > 0 && images.map((image, index) => (

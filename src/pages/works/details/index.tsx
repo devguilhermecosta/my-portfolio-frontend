@@ -228,7 +228,7 @@ export default function WorkDetail(): JSX.Element {
           </Carousel>
 
           <ImagesWorkManager 
-            WithBtnControl={true} 
+            testId='imagesManager'
             user={user}
             workId={work?.id}
             callbackFn={() => getImagesWork(work?.id)}

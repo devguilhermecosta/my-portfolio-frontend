@@ -4,6 +4,7 @@ import { ChangeEvent, CSSProperties } from "react";
 
 interface UploadProps extends CSSProperties {
   multiple?: boolean;
+  testId?: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -20,7 +21,7 @@ export default function UploadInput({ ...props }: UploadProps): JSX.Element {
       />
       <input
         type="file" 
-        data-testid="upload_images"
+        data-testid={!props.testId ? 'upload_images' : props.testId}
         accept="image/*"
         className={Style.custom_input_file}
         onChange={(e) => props.onChange(e)}
