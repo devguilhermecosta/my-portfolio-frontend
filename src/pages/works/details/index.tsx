@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext, ChangeEvent, FormEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { api, baseUrl } from '../../../utils/api';
-import { WorkProps } from '../../../interfaces/work';
+import { WorkProps, ImageWorkProps } from '../../../interfaces/work';
 import MainContainer from '../../../components/mainContainer';
 import NotFound from '../../../components/notFound';
 import Input from '../../../components/input';
@@ -13,9 +13,14 @@ import SubmitInput from '../../../components/submitInput';
 import { AuthContext } from '../../../contexts/authContext';
 import toast from 'react-hot-toast';
 import BackButton from '../../../components/backButton';
+import Carousel from '../../../components/carousel';
+import Style from './workDetails.module.css';
+import { MdDelete } from "react-icons/md";
+import ImagesWorkManager from '../../../components/imagesWorkManager';
 
 export default function WorkDetail(): JSX.Element {
-  const [work, setWork] = useState<WorkProps | undefined>();
+  const [work, setWork] = useState<WorkProps>();
+  const [imagesWork, setImagesWork] = useState<ImageWorkProps[]>([]);
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -44,6 +49,7 @@ export default function WorkDetail(): JSX.Element {
         setTitle(response.data.title);
         setDescription(response.data.description);
         setLink(response.data?.link);
+        getImagesWork(response.data?.id)
       })
       .catch(() => setWork(undefined))
       .finally(() => setLoading(false))
@@ -52,6 +58,11 @@ export default function WorkDetail(): JSX.Element {
     getWork(slug);
 
   }, [slug])
+
+  async function getImagesWork(workId: number) {
+    await api.get(`work/api/images/${workId}/list/`)
+    .then(r => setImagesWork(r.data))
+  }
 
   function handleCover(e: ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
@@ -122,6 +133,22 @@ export default function WorkDetail(): JSX.Element {
     .finally(() => setSaving(false))
   }
 
+  async function handleImageDelete(imageId: number) {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${user}`
+      }
+    }
+
+    await api.delete(`work/api/image/${imageId}/`, config)
+    .then(() => {
+      setImagesWork(imagesWork.filter(image => image.id !== imageId));
+      toast.success('image deleted successfully');
+    })
+    .catch(() => toast.error('error on image delete'))
+  }
+
   return (
     <MainContainer>
 
@@ -130,61 +157,90 @@ export default function WorkDetail(): JSX.Element {
       {saving && <Loading />}
 
     {work 
-    ? 
-      <form
-      encType='multipart/form-data'
-        style={{ width: '100%', maxWidth: '840px' }}
-      >
-        <Input 
-          labelName='title' 
-          value={title}
-          error={errorTitle}
-          onChange={e => setTitle(e.target.value)}
-        />
+    ? <>
+        <form
+        encType='multipart/form-data'
+          style={{ width: '100%', maxWidth: '840px' }}
+        >
+          <Input 
+            labelName='title' 
+            value={title}
+            error={errorTitle}
+            onChange={e => setTitle(e.target.value)}
+          />
 
-        <TextArea
-          label='description'
-          value={description}
-          error={errorDescription}
-          onChange={(e) => setDescription(e.target.value)}
-        />
+          <TextArea
+            label='description'
+            value={description}
+            error={errorDescription}
+            onChange={(e) => setDescription(e.target.value)}
+          />
 
-        <Input 
-          labelName='link' 
-          value={link}
-          error={errorLink}
-          onChange={e => setLink(e.target.value)}
-        />
+          <Input 
+            labelName='link' 
+            value={link}
+            error={errorLink}
+            onChange={e => setLink(e.target.value)}
+          />
 
-        {work?.cover && (
-          <div style={{
-            position: 'relative',
-            width: 'fit-content',
-            margin: '0 auto',
-          }}>
-            <UploadInput 
-              position='absolute' 
-              top='50%' left='50%' 
-              transform='translate(-50%, -50%)'
-              multiple={false}
-              onChange={(e) => {handleCover(e)}}
-            />
+          {work?.cover && (
+            <div style={{
+              position: 'relative',
+              width: 'fit-content',
+              margin: '0 auto',
+            }}>
+              <UploadInput 
+                position='absolute' 
+                top='50%' left='50%' 
+                transform='translate(-50%, -50%)'
+                multiple={false}
+                onChange={(e) => {handleCover(e)}}
+              />
 
-            {coverUrl 
-            ? <Cover coverUrl={coverUrl} alt={`image of ${cover?.name}`}/>
-            : <Cover coverUrl={`${baseUrl}${work.cover}`} alt={`image of ${title}`}/>
-            }
-            
-          </div>
-        )}
+              {coverUrl 
+              ? <Cover coverUrl={coverUrl} alt={`image of ${cover?.name}`}/>
+              : <Cover coverUrl={`${baseUrl}${work.cover}`} alt={`image of ${title}`}/>
+              }
+              
+            </div>
+          )}
 
-        <SubmitInput onClick={(e) => handleSubmit(e)}/>
+          <Carousel style={{ marginTop: '20px' }}>
+            {imagesWork && imagesWork.map(image => (
+              <div key={image.id} className={Style.C_work_image}>
+                <MdDelete 
+                  size={28}
+                  color='var(--secondaire-g1)'
+                  style={{ 
+                    position: 'absolute',
+                    top: '5px',
+                    right: '5px',
+                    backgroundColor: 'rgba(0, 0, 0, 70%)',
+                    borderRadius: '50%',
+                    padding: '3px',
+                    cursor: 'pointer',
+                   }}
+                  onClick={() => handleImageDelete(image?.id)}
+                />
+                <img src={`${baseUrl}${image.url}`} alt='work image' />
+              </div>
+            ))}
+          </Carousel>
 
-      </form>
+          <ImagesWorkManager 
+            WithBtnControl={true} 
+            user={user}
+            workId={work?.id}
+            callbackFn={() => getImagesWork(work?.id)}
+          />
+
+          <SubmitInput onClick={(e) => handleSubmit(e)}/>
+
+        </form>
+      </>
     : <NotFound />
     }
   </MainContainer>
   )
 }
 
-// TODO - to create the patch to work images
