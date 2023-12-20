@@ -109,10 +109,6 @@ export default function NewWork(): JSX.Element {
 
       {loading && (<Loading />)}
 
-      {workId && (
-        <ImagesWorkManager user={user} workId={workId} callbackFn={() => cleanFields()}/>
-      )}
-
       <BackButton onClick={() => navigate('/admin/dashboard/works')}/>
   
       <h1 className={Style.C_Work_title}>New Work</h1>
@@ -168,6 +164,10 @@ export default function NewWork(): JSX.Element {
         <SubmitInput />
         
       </form>
+
+      {workId && (
+        <ImagesWorkManager user={user} workId={workId} callbackFn={() => cleanFields()}/>
+      )}
 
     </MainContainer>
   )
