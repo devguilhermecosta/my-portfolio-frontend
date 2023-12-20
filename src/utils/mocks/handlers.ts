@@ -35,5 +35,8 @@ export const handlers = [
   }),
   http.get(`${baseUrl}/work/api/:slug/`, () => {
     return new HttpResponse(null, { status: 404 })
+  }),
+  http.get(`${baseUrl}/work/api/images/:id/list/`, () => {
+    return new HttpResponse(null, { status: 200 })
   })
 ]
