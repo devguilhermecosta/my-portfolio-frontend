@@ -38,6 +38,12 @@ export default function Dashboard(): JSX.Element {
         >
           works
         </button>
+        <button 
+          className={Style.C_dashboard_button}
+          onClick={() => navigate('/')}
+        >
+          show the site
+        </button>
       </section>
     </MainContainer>
   )
