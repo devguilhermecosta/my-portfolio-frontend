@@ -147,3 +147,5 @@ export default function Home(): JSX.Element {
     </MainContainer>
   )
 }
+
+// TODO - on API, to create the is_published property in the works
