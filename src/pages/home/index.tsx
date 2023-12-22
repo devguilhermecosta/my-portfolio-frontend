@@ -113,16 +113,18 @@ export default function Home(): JSX.Element {
       </SpaceSection>
 
       {/* SUBTITLE */}
-      <SpaceSection>
+      {works.length > 0 && (
+        <SpaceSection>
         <section className={Style.C_title}>
           <p>Conheça alguns dos meus trabalhos</p>
         </section>
-      </SpaceSection>
+        </SpaceSection>
+      )}
 
       {/* WORKS */}
       <SpaceSection>
         <Carousel>
-          {works && works.map(work => (
+          {works.length > 0 && works.map(work => (
             <div key={work.id} className={Style.C_work}>
               <Link to={`work/${work.slug}`}>
                 <img src={`${baseUrl}/${work.cover}`} alt={`image of ${work.title}`} />
