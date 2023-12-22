@@ -23,6 +23,7 @@ describe('<Dashboard />', () => {
     await screen.findByText(/logout/i);
     await screen.findByText(/networks/i);
     await screen.findByText(/^works$/i);
+    await screen.findByText(/show the site/i);
 
   });
 
@@ -63,5 +64,15 @@ describe('<Dashboard />', () => {
     fireEvent.click(logoutButton);
 
     await waitFor(() => expect(window.location.href).toContain('/admin/dashboard/works'));
+  });
+
+  it('should navigate to home page', async () => {
+    renderDashboard();
+
+    const logoutButton = screen.getByText(/^show the site$/i);
+
+    fireEvent.click(logoutButton);
+
+    await waitFor(() => expect(window.location.href).toContain('/'));
   });
 })
