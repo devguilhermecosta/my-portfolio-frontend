@@ -1,6 +1,7 @@
 import { http, HttpResponse } from 'msw';
 import { workList } from './worksList';
 import { baseUrl } from '../api';
+import { oneWorkMock } from './worksList';
 
 export const handlers = [
   http.post(`${baseUrl}/api/token/`, () => {
@@ -34,7 +35,7 @@ export const handlers = [
     return new HttpResponse(null, { status: 400 });
   }),
   http.get(`${baseUrl}/work/api/:slug/`, () => {
-    return new HttpResponse(null, { status: 404 })
+    return HttpResponse.json(oneWorkMock, { status: 200 })
   }),
   http.get(`${baseUrl}/work/api/images/:id/list/`, () => {
     return new HttpResponse(null, { status: 200 })

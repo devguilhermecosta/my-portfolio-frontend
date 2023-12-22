@@ -1,3 +1,11 @@
+export const oneWorkMock = {
+	id: 1,
+	title: 'work title',
+	description: 'work description',
+	link: 'https://my-work.com',
+	cover: 'work cover'
+};
+
 export const workList = [
 	{
 		"id": 7,
@@ -55,4 +63,4 @@ export const workList = [
 			}
 		]
 	}
-]
+];

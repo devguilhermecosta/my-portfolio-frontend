@@ -144,9 +144,15 @@ export default function WorkDetail(): JSX.Element {
     await api.delete(`work/api/image/${imageId}/`, config)
     .then(() => {
       setImagesWork(imagesWork.filter(image => image.id !== imageId));
-      toast.success('image deleted successfully');
+      const msg = 'image deleted successfully';
+      toast.success(msg);
+      console.log(msg);
     })
-    .catch(() => toast.error('error on image delete'))
+    .catch(() => {
+      const msg = 'error on delete the image';
+      toast.error(msg);
+      console.error(msg)
+    })
   }
 
   return (
@@ -211,6 +217,8 @@ export default function WorkDetail(): JSX.Element {
                 <MdDelete 
                   size={28}
                   color='var(--secondaire-g1)'
+                  id={`btn-delete-of-img-${image.id}`}
+                  data-testid={`btn-delete-of-img-${image.id}`}
                   style={{ 
                     position: 'absolute',
                     top: '5px',
@@ -222,7 +230,7 @@ export default function WorkDetail(): JSX.Element {
                    }}
                   onClick={() => handleImageDelete(image?.id)}
                 />
-                <img src={`${baseUrl}${image.url}`} alt='work image' />
+                <img src={`${baseUrl}${image.url}`} alt={`image ${image.id} of work ${work.title}`} />
               </div>
             ))}
           </Carousel>

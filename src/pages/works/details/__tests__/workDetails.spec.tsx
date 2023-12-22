@@ -7,6 +7,7 @@ import { http, HttpResponse } from 'msw';
 import { BrowserRouter } from 'react-router-dom';
 import { baseUrl } from '../../../../utils/api';
 import WorkDetail from '..';
+import { imagesWorkList } from '../../../../utils/mocks/imagesWorkList';
 
 const globalURL = global.URL.createObjectURL = vi.fn();
 
@@ -32,18 +33,6 @@ describe('<WorkDetail />', () => {
   });
 
   it('should render the work data', async () => {
-    server.use(
-      http.get(`${baseUrl}/work/api/:slug/`, () => {
-        return HttpResponse.json({
-          id: 1,
-          title: 'work title',
-          description: 'work description',
-          link: 'https://my-work.com',
-          cover: 'work cover'
-        }, { status: 200 })
-      })
-    )
-
     renderWorkDetail();
 
     await screen.findByDisplayValue('work title');
@@ -53,18 +42,6 @@ describe('<WorkDetail />', () => {
   });
 
   it('should navigate to works page on button click', async () => {
-    server.use(
-      http.get(`${baseUrl}/work/api/:slug/`, () => {
-        return HttpResponse.json({
-          id: 1,
-          title: 'work title',
-          description: 'work description',
-          link: 'https://my-work.com',
-          cover: 'work cover'
-        }, { status: 200 })
-      })
-    )
-
     const user = userEvent.setup();
     renderWorkDetail();
 
@@ -75,19 +52,6 @@ describe('<WorkDetail />', () => {
   });
 
   it('should change the field data', async () => {
-    // intercept the request
-    server.use(
-      http.get(`${baseUrl}/work/api/:slug/`, () => {
-        return HttpResponse.json({
-          id: 1,
-          title: 'work title',
-          description: 'work description',
-          link: 'https://my-work.com',
-          cover: 'work cover'
-        }, { status: 200 })
-      })
-    )
-
     // new data to change input value
     const newData = {
       title: 'new title',
@@ -135,15 +99,6 @@ describe('<WorkDetail />', () => {
   it('should return status code 400', async () => {
     // intercept the request
     server.use(
-      http.get(`${baseUrl}/work/api/:slug/`, () => {
-        return HttpResponse.json({
-          id: 1,
-          title: 'work title',
-          description: 'work description',
-          link: 'https://my-work.com',
-          cover: 'work cover'
-        }, { status: 200 })
-      }),
       http.patch(`${baseUrl}/work/api/:slug/`, () => {
         return new HttpResponse(null, { status: 400 })
       })
@@ -163,15 +118,6 @@ describe('<WorkDetail />', () => {
   it('should change the inputs to red when status code 400', async () => {
     // intercept the request
     server.use(
-      http.get(`${baseUrl}/work/api/:slug/`, () => {
-        return HttpResponse.json({
-          id: 1,
-          title: 'work title',
-          description: 'work description',
-          link: 'https://my-work.com',
-          cover: 'work cover'
-        }, { status: 200 })
-      }),
       http.patch(`${baseUrl}/work/api/:slug/`, () => {
         return HttpResponse.json({
           link: 'Formato incorreto',
@@ -208,15 +154,6 @@ describe('<WorkDetail />', () => {
   it('should return status code 204', async () => {
     // intercept the request
     server.use(
-      http.get(`${baseUrl}/work/api/:slug/`, () => {
-        return HttpResponse.json({
-          id: 1,
-          title: 'work title',
-          description: 'work description',
-          link: 'https://my-work.com',
-          cover: 'work cover'
-        }, { status: 200 })
-      }),
       http.patch(`${baseUrl}/work/api/:slug/`, () => {
         return new HttpResponse(null, { status: 204 })
       })
@@ -236,15 +173,6 @@ describe('<WorkDetail />', () => {
   it('should show the changed value after patch request', async () => {
     // intercept the request
     server.use(
-      http.get(`${baseUrl}/work/api/:slug/`, () => {
-        return HttpResponse.json({
-          id: 1,
-          title: 'work title',
-          description: 'work description',
-          link: 'https://my-work.com',
-          cover: 'image of work title'
-        }, { status: 200 })
-      }),
       http.patch(`${baseUrl}/work/api/:slug/`, () => {
         return new HttpResponse(null, { status: 204 })
       })
@@ -291,4 +219,73 @@ describe('<WorkDetail />', () => {
     expect(await screen.findByDisplayValue(newData.link));
     expect(await screen.findByAltText(`image of ${newData.title}`));
   });
+
+  it('should loads images work', async () => {
+    // intercept the request
+    server.use(
+      http.get(`${baseUrl}/work/api/images/:id/list/`, () => {
+        return HttpResponse.json(imagesWorkList, { status: 200 })
+      })
+    )
+
+    // render the component
+    renderWorkDetail();
+
+    await screen.findByAltText('image 1 of work work title');
+    await screen.findByAltText('image 2 of work work title');
+  })
+
+  it('should delete the images work', async () => {
+    // intercept the request
+    server.use(
+      http.get(`${baseUrl}/work/api/images/:id/list/`, () => {
+        return HttpResponse.json(imagesWorkList, { status: 200 })
+      }),
+      http.delete(`${baseUrl}/work/api/image/:id/`, () => {
+        return new HttpResponse(null, { status: 204 })
+      })
+    )
+
+    // create an user event
+    const user = userEvent.setup();
+
+    // render the component
+    renderWorkDetail();
+
+    const spy = vi.spyOn(console, 'log');
+
+    await screen.findByAltText('image 1 of work work title');
+
+    const btnDeleteImg01 = await screen.findByTestId('btn-delete-of-img-1');
+    await user.click(btnDeleteImg01);
+
+    expect(spy).toHaveBeenCalledWith('image deleted successfully');
+  })
+
+  it('should return error on delete the images work', async () => {
+    // intercept the request
+    server.use(
+      http.get(`${baseUrl}/work/api/images/:id/list/`, () => {
+        return HttpResponse.json(imagesWorkList, { status: 200 })
+      }),
+      http.delete(`${baseUrl}/work/api/image/:id/`, () => {
+        return new HttpResponse(null, { status: 400 })
+      })
+    )
+
+    // create an user event
+    const user = userEvent.setup();
+
+    // render the component
+    renderWorkDetail();
+
+    const spy = vi.spyOn(console, 'error');
+
+    await screen.findByAltText('image 1 of work work title');
+
+    const btnDeleteImg01 = await screen.findByTestId('btn-delete-of-img-1');
+    await user.click(btnDeleteImg01);
+
+    expect(spy).toHaveBeenCalledWith('error on delete the image');
+  })
 })
