@@ -13,6 +13,7 @@ import toast from "react-hot-toast";
 import BackButton from "../../../components/backButton";
 import { useNavigate } from "react-router-dom";
 import ImagesWorkManager from "../../../components/imagesWorkManager";
+import SpaceSection from '../../../components/spaceSection';
 
 interface ErrorProps {
   title?: string;
@@ -166,7 +167,9 @@ export default function NewWork(): JSX.Element {
       </form>
 
       {workId && (
-        <ImagesWorkManager user={user} workId={workId} callbackFn={() => cleanFields()}/>
+        <SpaceSection>
+          <ImagesWorkManager user={user} workId={workId} callbackFn={() => cleanFields()}/>
+        </SpaceSection>
       )}
 
     </MainContainer>
