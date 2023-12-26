@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = 'https://api.my-portfolio.devguilhermecosta.com';
+const baseUrl = 'https://api.myportfolio.devguilhermecosta.com';
 
 const api = axios.create({
   baseURL: baseUrl,
