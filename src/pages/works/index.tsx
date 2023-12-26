@@ -13,8 +13,6 @@ export default function Works(): JSX.Element {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  console.log(works)
-
   useEffect(() => {
     async function getWorks() {
       await api.get(`/work/api/list/?token=${token_access}`)
