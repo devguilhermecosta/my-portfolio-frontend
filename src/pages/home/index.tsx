@@ -10,13 +10,14 @@ import { useEffect, useState } from "react";
 import { api, baseUrl } from "../../utils/api";
 import { WorkProps } from '../../interfaces/work';
 import Header from "../../components/header";
+import { token_access } from "../../utils/api";
 
 export default function Home(): JSX.Element {
   const [works, setWorks] = useState<WorkProps[]>([]);
 
   useEffect(() => {
     async function getWorks() {
-      await api.get('/work/api/list/')
+      await api.get(`/work/api/list/?token=${token_access}`)
       .then(r => setWorks(r.data))
     }
 

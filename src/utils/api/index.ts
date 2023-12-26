@@ -1,9 +1,10 @@
 import axios from "axios";
 
-const baseUrl = 'https://api.myportfolio.devguilhermecosta.com';
+const token_access = import.meta.env.VITE_API_TOKEN_ACCESS;
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const api = axios.create({
   baseURL: baseUrl,
 });
 
-export { baseUrl, api };
+export { baseUrl, token_access, api };

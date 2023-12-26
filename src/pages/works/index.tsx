@@ -6,15 +6,18 @@ import { WorkProps } from "../../interfaces/work";
 import BackButton from "../../components/backButton";
 import Button from "../../components/button";
 import { useNavigate } from "react-router-dom";
+import { token_access } from "../../utils/api";
 
 export default function Works(): JSX.Element {
   const [works, setWorks] = useState<WorkProps[]>([]);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  console.log(works)
+
   useEffect(() => {
     async function getWorks() {
-      await api.get('/work/api/list/')
+      await api.get(`/work/api/list/?token=${token_access}`)
       .then(response => setWorks(response.data))
       .catch(e => {
         setError(`internal server error: ${e}`)
@@ -39,7 +42,7 @@ export default function Works(): JSX.Element {
 
       <section className={Style.C_works}>
         
-        {works && works.map((work) => (
+        {works.length > 0 && works.map((work) => (
           <section key={work.id} className={Style.C_work}>
             <div className={Style.C_work_image_container}>
               <a href={`/admin/dashboard/works/${work.slug}`}>

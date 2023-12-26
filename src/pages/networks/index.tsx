@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import BackButton from "../../components/backButton";
 import SubmitInput from "../../components/submitInput";
+import { token_access } from "../../utils/api";
 
 interface ErrorDataProps {
   instagram?: string;
@@ -38,7 +39,7 @@ export default function Networks(): JSX.Element {
 
   useEffect(() => {
     async function getNetworks() {
-      await api.get('/networks/api/v1/')
+      await api.get(`/networks/api/v1/?token=${token_access}`)
       .then(response => {
         setInstagram(response.data.instagram);
         setLinkedin(response.data.linkedin);

@@ -17,6 +17,7 @@ import Carousel from '../../../components/carousel';
 import Style from './workDetails.module.css';
 import { MdDelete } from "react-icons/md";
 import ImagesWorkManager from '../../../components/imagesWorkManager';
+import { token_access } from '../../../utils/api';
 
 export default function WorkDetail(): JSX.Element {
   const [work, setWork] = useState<WorkProps>();
@@ -43,7 +44,7 @@ export default function WorkDetail(): JSX.Element {
 
   useEffect(() => {
     async function getWork(slug: string | undefined): Promise<void> {
-      await api.get(`${baseUrl}/work/api/${slug}/`)
+      await api.get(`${baseUrl}/work/api/${slug}/?token=${token_access}`)
       .then((response) => {
         setWork(response.data);
         setTitle(response.data.title);
@@ -60,7 +61,7 @@ export default function WorkDetail(): JSX.Element {
   }, [slug])
 
   async function getImagesWork(workId: number) {
-    await api.get(`work/api/images/${workId}/list/`)
+    await api.get(`work/api/images/${workId}/list/?token=${token_access}`)
     .then(r => setImagesWork(r.data))
   }
 

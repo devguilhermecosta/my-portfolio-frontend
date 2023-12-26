@@ -2,6 +2,7 @@ import Style from './header.module.css';
 import { Link } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import { api } from '../../utils/api';
+import { token_access } from '../../utils/api';
 
 interface NetworksProps {
   instagram: string;
@@ -14,7 +15,7 @@ export default function Header(): JSX.Element {
 
   useEffect(() => {
     async function getNetworks() {
-      await api.get('/networks/api/v1/')
+      await api.get(`/networks/api/v1/?token=${token_access}`)
       .then(r => setNetworks(r.data));
     }
 

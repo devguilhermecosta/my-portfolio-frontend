@@ -11,6 +11,7 @@ import { baseUrl } from "../../../../utils/api";
 import Carousel from '../../../../components/carousel';
 import { BsArrowsAngleExpand } from "react-icons/bs";
 import Header from '../../../../components/header';
+import { token_access } from '../../../../utils/api';
 
 export default function HomeWorkDetail(): JSX.Element {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ export default function HomeWorkDetail(): JSX.Element {
 
   useEffect(() => {
     async function getWork() {
-      await api.get(`/work/api/${slug}/`)
+      await api.get(`/work/api/${slug}/?token=${token_access}`)
       .then(r => {
         setWork(r.data);
         setImage(baseUrl + r.data.cover);
