@@ -1,5 +1,6 @@
-import { useRef, SyntheticEvent, ReactNode, CSSProperties } from 'react';
+import { useRef, SyntheticEvent, ReactNode, CSSProperties, useState } from 'react';
 import Style from './carousel.module.css';
+import { carouselControl } from './conf';
 
 interface CarouselProps {
   children: ReactNode;
@@ -9,13 +10,12 @@ interface CarouselProps {
 export default function Carousel({ children, style }: CarouselProps): JSX.Element {
   const carouselRef = useRef<HTMLElement | null>(null);
 
-  const carouselControl = {
-    isDragging: false,
-    pointA: 0,
-    pointB: 0,
-    distance: 0,
-    scrollLeft: 0,
-  }
+  /**
+   * this is not used directly for the carousel to work, 
+   * but only to update the page with each scroll of the carousel. 
+   * Without this, some properties will not work.
+  **/
+  const [isDrag, setIsDrag] = useState(false);
 
   function preventDefault(e: SyntheticEvent): void {
     e.nativeEvent instanceof MouseEvent ? e.preventDefault() : null; 
@@ -42,18 +42,24 @@ export default function Carousel({ children, style }: CarouselProps): JSX.Elemen
     if (carouselRef.current) {
       carouselRef.current.scrollLeft = carouselControl.scrollLeft - carouselControl.distance;
     }
+
+    setIsDrag(true);
   }
 
   function handleEnd(e: SyntheticEvent) {
     preventDefault(e);
     carouselControl.isDragging = false;
+    setIsDrag(false);
   }
 
   return(
     <section
       ref={carouselRef}
       className={Style.C_carousel}
-      style={style}
+      style={{
+        ...style,
+        cursor: isDrag ? 'grab' : 'auto',
+      }}
 
       onMouseDown={(e) => handleStart(e)}
       onMouseMove={(e) => handleMove(e)}
@@ -64,7 +70,11 @@ export default function Carousel({ children, style }: CarouselProps): JSX.Elemen
       onTouchMove={(e) => handleMove(e)}
       onTouchEnd={(e) => handleEnd(e)}
     >
-      { children }
+      <div style={{
+        pointerEvents: isDrag ? 'none' : 'all',
+      }}>
+        { children }
+      </div>
     </section>
   )
 }
