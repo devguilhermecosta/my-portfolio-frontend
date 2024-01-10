@@ -36,8 +36,11 @@
 
 .C_work_link {
   text-decoration: none;
+  font-style: italic;
   color: var(--secondaire-std);
-  align-self: flex-start;
+  background-color: rgba(50, 50, 50, .9);
+  padding: 5px;
+  border-radius: 8px;
 }
 
 .C_work_c_cover {
