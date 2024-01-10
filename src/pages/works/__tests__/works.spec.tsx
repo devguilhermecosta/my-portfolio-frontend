@@ -5,6 +5,7 @@ import Works from '..';
 import { server } from '../../../utils/mocks/node';
 import { http, HttpResponse} from 'msw';
 import { BrowserRouter } from 'react-router-dom';
+import { workList } from '../../../utils/mocks/worksList';
 
 const renderWorks = () => {
   return render(
@@ -17,10 +18,10 @@ const renderWorks = () => {
 describe('<Works />', () => {
   it('should render error message if server error', async () => {
     server.use(
-      http.get('http://127.0.0.1:8000/work/api/list/', () => {
+      http.get('/work/api/list/', () => {
         return new HttpResponse('internal server error', { status: 500 })
       })
-    )
+    );
 
     renderWorks();
 
@@ -29,9 +30,13 @@ describe('<Works />', () => {
   });
 
   it('should render the works', async () => {
-    renderWorks();
+    server.use(
+      http.get('/work/api/list/', () => {
+        return HttpResponse.json(workList, { status: 200 })
+      })
+    );
 
-    /* see the handlers on ./src/utils/mocks/handlers.ts */
+    renderWorks();
 
     await screen.findByText(/work title 1/i);
     await screen.findByText(/work title 2/i);
@@ -40,6 +45,12 @@ describe('<Works />', () => {
   });
 
   it('should navigate to new work page', () => {
+    server.use(
+      http.get('/work/api/list/', () => {
+        return HttpResponse.json(workList, { status: 200 })
+      })
+    );
+
     renderWorks();
 
     const newWork = screen.getByText(/new work/i);
@@ -49,6 +60,12 @@ describe('<Works />', () => {
   });
 
   it('should return to dashboard', () => {
+    server.use(
+      http.get('/work/api/list/', () => {
+        return HttpResponse.json(workList, { status: 200 })
+      })
+    );
+
     renderWorks();
 
     const backButton = screen.getByText(/</i);

@@ -4,7 +4,6 @@ import userEvent from '@testing-library/user-event';
 import { describe, it } from 'vitest';
 import ContactElement from '..';
 import { BrowserRouter } from 'react-router-dom';
-import { baseUrl } from '../../../utils/api';
 import { server } from '../../../utils/mocks/node';
 import { http, HttpResponse } from 'msw';
 
@@ -31,7 +30,7 @@ describe('<ContactElement />', () => {
 
   it('should open the contact page when clicked', async () => {
     server.use(
-      http.get(`${baseUrl}/networks/api/v1/`, () => {
+      http.get(`/networks/api/v1/`, () => {
         return HttpResponse.json({
           whatsapp: '(88) 8 8888-8888',
           phone: '(99) 9 9999-9999',
@@ -50,7 +49,7 @@ describe('<ContactElement />', () => {
 
   it('should open default contact values if error from get api data', async () => {
     server.use(
-      http.get(`${baseUrl}/networks/api/v1/`, () => {
+      http.get(`/networks/api/v1/`, () => {
         return HttpResponse.json(null, { status: 400 })
       })
     )
@@ -67,7 +66,7 @@ describe('<ContactElement />', () => {
 
   it('should show the contact api values', async () => {
     server.use(
-      http.get(`${baseUrl}/networks/api/v1/`, () => {
+      http.get(`/networks/api/v1/`, () => {
         return HttpResponse.json({
           whatsapp: '(88) 8 8888-8888',
           phone: '(99) 9 9999-9999',

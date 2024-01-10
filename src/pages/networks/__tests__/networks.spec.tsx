@@ -6,7 +6,6 @@ import userEvent from '@testing-library/user-event';
 import { server } from '../../../utils/mocks/node';
 import { http, HttpResponse } from 'msw';
 import { BrowserRouter } from 'react-router-dom';
-import { baseUrl } from '../../../utils/api';
 
 describe('<Networks />', () => {
   const renderNetworks = () => {
@@ -39,7 +38,7 @@ describe('<Networks />', () => {
 
   it('should render the networks if networks exists when get request', async () => {
     server.use(
-      http.get(`${baseUrl}/networks/api/v1/`, () => {
+      http.get(`/networks/api/v1/`, () => {
         return HttpResponse.json(networksData, { status: 200 })
       }),
     );
@@ -59,10 +58,10 @@ describe('<Networks />', () => {
 
   it('should render red input fields when error on patch request', async () => {
     server.use(
-      http.get('http://127.0.0.1:8000/networks/api/v1/', () => {
+      http.get('/networks/api/v1/', () => {
         return HttpResponse.json(networksData, { status: 200 })
       }),
-      http.patch('http://127.0.0.1:8000/networks/api/v1/', () => {
+      http.patch('/networks/api/v1/', () => {
         return HttpResponse.json(netWorksErrors, { status: 400 })
       })
     );
@@ -89,10 +88,10 @@ describe('<Networks />', () => {
     networksData.email = '';
 
     server.use(
-      http.get('http://127.0.0.1:8000/networks/api/v1/', () => {
+      http.get('/networks/api/v1/', () => {
         return HttpResponse.json(networksData, { status: 200 })
       }),
-      http.patch(`${baseUrl}/networks/api/v1/`, () => {
+      http.patch(`/networks/api/v1/`, () => {
         return new HttpResponse(null, { status: 204 })
       }),
     );
@@ -114,10 +113,10 @@ describe('<Networks />', () => {
   it('should render red input fields when error on post request', async () => {
     server.use(
       /* returns 404 to say that there is no networks instance */
-      http.get('http://127.0.0.1:8000/networks/api/v1/', () => {
+      http.get('/networks/api/v1/', () => {
         return new HttpResponse(null, { status: 404 })
       }),
-      http.post('http://127.0.0.1:8000/networks/api/v1/', () => {
+      http.post('/networks/api/v1/', () => {
         return HttpResponse.json(netWorksErrors, { status: 400 })
       })
     );
@@ -145,10 +144,10 @@ describe('<Networks />', () => {
 
     server.use(
       /* returns 404 to say that there is no networks instance */
-      http.get('http://127.0.0.1:8000/networks/api/v1/', () => {
+      http.get('/networks/api/v1/', () => {
         return new HttpResponse(null, { status: 404 })
       }),
-      http.post('http://127.0.0.1:8000/networks/api/v1/', () => {
+      http.post('/networks/api/v1/', () => {
         return HttpResponse.json(networksData, { status: 201 })
       })
     );
@@ -178,6 +177,12 @@ describe('<Networks />', () => {
   });
 
   it('should return to dashboard', () => {
+    server.use(
+      http.get('/networks/api/v1/', () => {
+        return HttpResponse.json(networksData, { status: 200 })
+      })
+    );
+
     renderNetworks();
 
     const backButton = screen.getByText(/</i);

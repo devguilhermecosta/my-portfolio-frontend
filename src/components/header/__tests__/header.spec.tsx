@@ -3,7 +3,6 @@ import { render, screen } from '@testing-library/react';
 import { describe, it } from 'vitest';
 import { server } from '../../../utils/mocks/node';
 import { http, HttpResponse } from 'msw';
-import { baseUrl } from '../../../utils/api';
 import { BrowserRouter } from 'react-router-dom';
 import Header from '..';
 
@@ -22,7 +21,7 @@ describe('<Home />', () => {
       github: 'https://github.com'
     }
     server.use(
-      http.get(`${baseUrl}/networks/api/v1/`, () => {
+      http.get(`/networks/api/v1/`, () => {
         return HttpResponse.json(apiData, { status: 200 })
       })
     )

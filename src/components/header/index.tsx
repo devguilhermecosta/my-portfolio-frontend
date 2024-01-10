@@ -16,7 +16,7 @@ export default function Header(): JSX.Element {
   useEffect(() => {
     async function getNetworks() {
       await api.get('/networks/api/v1/', { headers: HEADER_API_KEY })
-      .then(r => setNetworks(r.data));
+      .then(r => setNetworks(r.data))
     }
 
     getNetworks();

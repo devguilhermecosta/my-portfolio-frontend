@@ -44,10 +44,10 @@ describe('<loginPage />', () => {
 
   it('should render username or password is invalid', async () => {
     const handlers = [
-      http.post('http://127.0.0.1:8000/api/token/', () => {
+      http.post('/api/token/', () => {
         return new HttpResponse(null, { status: 401 });
       }),
-      http.post('http://127.0.0.1:8000/api/token/refresh/', () => {
+      http.post('/api/token/refresh/', () => {
         return new HttpResponse(null, { status: 401 })
       }),
     ]
@@ -73,7 +73,7 @@ describe('<loginPage />', () => {
 
   it('should authenticate the user', async () => {
     const handlers = [
-      http.post('http://127.0.0.1:8000/api/token/', () => {
+      http.post('/api/token/', () => {
         return HttpResponse.json({
           data: {
             refresh: 'abc',
@@ -81,7 +81,7 @@ describe('<loginPage />', () => {
           }
         }, { status: 200 })
       }),
-      http.post('http://127.0.0.1:8000/api/token/refresh/', () => {
+      http.post('/api/token/refresh/', () => {
         return HttpResponse.json({
           data: {
             access: 'abc'

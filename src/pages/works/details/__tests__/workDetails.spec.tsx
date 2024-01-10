@@ -289,3 +289,5 @@ describe('<WorkDetail />', () => {
     expect(spy).toHaveBeenCalledWith('error on delete the image');
   })
 })
+
+//TODO - continuar a refatoração de testes a partir daqui

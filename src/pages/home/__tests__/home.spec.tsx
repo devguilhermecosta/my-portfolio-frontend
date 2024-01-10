@@ -3,7 +3,6 @@ import { render, screen } from '@testing-library/react';
 import { describe, it } from 'vitest';
 import { server } from '../../../utils/mocks/node';
 import { http, HttpResponse } from 'msw';
-import { baseUrl } from '../../../utils/api';
 import { BrowserRouter } from 'react-router-dom';
 import Home from '..';
 import { workList } from '../../../utils/mocks/worksList';
@@ -18,8 +17,11 @@ const renderHomePage = () => {
 describe('<Home />', () => {
   it('should render the works', async () => {
     server.use(
-      http.get(`${baseUrl}/work/api/list/`, () => {
+      http.get('/work/api/list/', () => {
         return HttpResponse.json(workList, { status: 200 })
+      }),
+      http.get('/networks/api/v1/', () => {
+        return HttpResponse.json(null, { status: 200 })
       })
     )
 
