@@ -1,12 +1,12 @@
 import MainContainer from "../../components/mainContainer";
 import { useEffect, useState } from "react";
 import { api, baseUrl } from "../../utils/api";
+import { HEADER_API_KEY } from "../../utils/api/headers";
 import Style from './works.module.css';
 import { WorkProps } from "../../interfaces/work";
 import BackButton from "../../components/backButton";
 import Button from "../../components/button";
 import { useNavigate } from "react-router-dom";
-import { token_access } from "../../utils/api";
 
 export default function Works(): JSX.Element {
   const [works, setWorks] = useState<WorkProps[]>([]);
@@ -15,7 +15,7 @@ export default function Works(): JSX.Element {
 
   useEffect(() => {
     async function getWorks() {
-      await api.get(`/work/api/list/?token=${token_access}`)
+      await api.get(`/work/api/list/`, { headers: HEADER_API_KEY })
       .then(response => setWorks(response.data))
       .catch(e => {
         setError(`internal server error: ${e}`)

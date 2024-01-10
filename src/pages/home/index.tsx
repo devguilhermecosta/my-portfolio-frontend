@@ -8,16 +8,17 @@ import Carousel from "../../components/carousel";
 import ContactElement from "../../components/contact";
 import { useEffect, useState } from "react";
 import { api, baseUrl } from "../../utils/api";
+import { HEADER_API_KEY } from "../../utils/api/headers";
 import { WorkProps } from '../../interfaces/work';
 import Header from "../../components/header";
-import { token_access } from "../../utils/api";
+
 
 export default function Home(): JSX.Element {
   const [works, setWorks] = useState<WorkProps[]>([]);
 
   useEffect(() => {
     async function getWorks() {
-      await api.get(`/work/api/list/?token=${token_access}`)
+      await api.get(`/work/api/list/`, { headers: HEADER_API_KEY })
       .then(r => setWorks(r.data))
     }
 

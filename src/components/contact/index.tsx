@@ -6,7 +6,7 @@ import gmailLogo from '../../utils/images/gmail.png';
 import phoneLogo from '../../utils/images/phone.png';
 import CallMeButton from '../callMeButton';
 import { api } from '../../utils/api';
-import { token_access } from '../../utils/api';
+import { HEADER_API_KEY } from '../../utils/api/headers';
 import { CSSProperties } from 'react';
 
 export default function ContactElement({ ctaText, style }: { ctaText?: string, style?: CSSProperties }): JSX.Element {
@@ -18,7 +18,7 @@ export default function ContactElement({ ctaText, style }: { ctaText?: string, s
   const [email, setEmail] = useState('guilherme.partic@gmail.com');
 
   async function getContact() {
-    await api.get(`/networks/api/v1/?token=${token_access}`)
+    await api.get('/networks/api/v1/', { headers: HEADER_API_KEY })
     .then(r => {
       const whatsapp: string = r.data.whatsapp;
       setWhatsappNumer(whatsapp.replace(/[^0-9]/g, ''));

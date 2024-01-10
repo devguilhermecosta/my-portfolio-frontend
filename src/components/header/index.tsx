@@ -2,7 +2,7 @@ import Style from './header.module.css';
 import { Link } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import { api } from '../../utils/api';
-import { token_access } from '../../utils/api';
+import { HEADER_API_KEY } from '../../utils/api/headers';
 
 interface NetworksProps {
   instagram: string;
@@ -15,7 +15,7 @@ export default function Header(): JSX.Element {
 
   useEffect(() => {
     async function getNetworks() {
-      await api.get(`/networks/api/v1/?token=${token_access}`)
+      await api.get('/networks/api/v1/', { headers: HEADER_API_KEY })
       .then(r => setNetworks(r.data));
     }
 

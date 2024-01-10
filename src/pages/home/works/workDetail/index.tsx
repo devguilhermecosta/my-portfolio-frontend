@@ -4,14 +4,13 @@ import BackButton from "../../../../components/backButton";
 import { useNavigate, useParams } from "react-router-dom";
 import { WorkProps } from "../../../../interfaces/work";
 import { useEffect, useState } from "react";
-import { api } from "../../../../utils/api";
 import Loading from "../../../../components/loading";
 import ContactElement from "../../../../components/contact";
-import { baseUrl } from "../../../../utils/api";
+import { baseUrl, api } from "../../../../utils/api";
+import { HEADER_API_KEY } from '../../../../utils/api/headers';
 import Carousel from '../../../../components/carousel';
 import { BsArrowsAngleExpand } from "react-icons/bs";
 import Header from '../../../../components/header';
-import { token_access } from '../../../../utils/api';
 
 export default function HomeWorkDetail(): JSX.Element {
   const navigate = useNavigate();
@@ -24,7 +23,7 @@ export default function HomeWorkDetail(): JSX.Element {
 
   useEffect(() => {
     async function getWork() {
-      await api.get(`/work/api/${slug}/?token=${token_access}`)
+      await api.get(`/work/api/${slug}/`, { headers: HEADER_API_KEY })
       .then(r => {
         setWork(r.data);
         setImage(baseUrl + r.data.cover);
@@ -62,7 +61,7 @@ export default function HomeWorkDetail(): JSX.Element {
                   href={work?.link} 
                   target="_blank" 
                   className={Style.C_work_link}>
-                    Link do projeto: {work?.link}
+                    Acessar o projeto
                 </a>
               )}
             </section>
@@ -115,3 +114,5 @@ export default function HomeWorkDetail(): JSX.Element {
     </MainContainer>
   )
 }
+
+//TODO - to create all tests
