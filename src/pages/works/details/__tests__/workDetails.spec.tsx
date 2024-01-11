@@ -48,6 +48,8 @@ describe('<WorkDetail />', () => {
     await screen.findByDisplayValue('work title');
     await screen.findByDisplayValue('work description');
     await screen.findByDisplayValue('https://my-work.com');
+    await screen.findByText(/publicado/);
+    await screen.findByText(/está na home/);
     await screen.findByAltText(/image of work title/i);
   });
 

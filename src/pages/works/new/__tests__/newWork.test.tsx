@@ -28,6 +28,8 @@ describe('<NewWork >', () => {
     await screen.findByLabelText(/link/i);
     await screen.findByLabelText(/cover/i);
     await screen.findByText(/save/i);
+    await screen.findByText(/publicado/i);
+    await screen.findByText(/está na home/i);
 
   });
 
