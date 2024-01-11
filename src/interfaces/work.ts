@@ -6,6 +6,8 @@ export interface WorkProps {
   link?: string;
   cover: string;
   create_at: string;
+  is_published: boolean;
+  show_in_home: boolean;
   images: ImageWorkProps[];
 }
 

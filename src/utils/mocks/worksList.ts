@@ -3,7 +3,9 @@ export const oneWorkMock = {
 	title: 'work title',
 	description: 'work description',
 	link: 'https://my-work.com',
-	cover: 'work cover'
+	cover: 'work cover',
+	is_published: true,
+	show_in_home: true,
 };
 
 export const workList = [
@@ -15,7 +17,9 @@ export const workList = [
 		"link": null,
 		"cover": "/media/works/covers/Sem_t%C3%ADtulo_ymKnj1J.jpg",
 		"created_at": "2023-11-18",
-		"images": []
+		"images": [],
+		"is_published": true,
+		"show_in_home": true,
 	},
 	{
 		"id": 4,
@@ -25,7 +29,9 @@ export const workList = [
 		"link": "https://meu-trabalho.com",
 		"cover": "/media/works/covers/Sem_t%C3%ADtulo_xgHqC3x.jpg",
 		"created_at": "2023-11-18",
-		"images": []
+		"images": [],
+		"is_published": true,
+		"show_in_home": true,
 	},
 	{
 		"id": 2,
@@ -61,6 +67,44 @@ export const workList = [
 				"work_id": 2,
 				"url": "/media/works/images/Sem_t%C3%ADtulo_HScG5f6.jpg"
 			}
-		]
-	}
+		],
+		"is_published": true,
+		"show_in_home": true,
+	},
+	{
+		"id": 9,
+		"title": "work title 4",
+		"slug": "este-e-o-titulo-do-projeto-100",
+		"description": "esta é a descrição do projeto",
+		"link": null,
+		"cover": "/media/works/covers/Sem_t%C3%ADtulo_ymKnj1J.jpg",
+		"created_at": "2023-11-18",
+		"images": [],
+		"is_published": true,
+		"show_in_home": true,
+	},
+	{
+		"id": 10,
+		"title": "work title 5",
+		"slug": "este-e-o-titulo-do-projeto",
+		"description": "esta é a descrição do projeto",
+		"link": "https://meu-trabalho.com",
+		"cover": "/media/works/covers/Sem_t%C3%ADtulo_xgHqC3x.jpg",
+		"created_at": "2023-11-18",
+		"images": [],
+		"is_published": true,
+		"show_in_home": false,
+	},
+	{
+		"id": 11,
+		"title": "work title 7",
+		"slug": "este-e-o-titulo-do-projeto",
+		"description": "esta é a descrição do projeto",
+		"link": "https://meu-trabalho.com",
+		"cover": "/media/works/covers/Sem_t%C3%ADtulo_xgHqC3x.jpg",
+		"created_at": "2023-11-18",
+		"images": [],
+		"is_published": true,
+		"show_in_home": false,
+	},
 ];

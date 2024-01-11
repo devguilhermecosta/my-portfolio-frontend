@@ -25,6 +25,18 @@ export default function Home(): JSX.Element {
     getWorks();
 
   }, [])
+
+  function renderWork(work: WorkProps) {
+    if (work.is_published && work.show_in_home) {
+      return (
+        <div key={work.id} className={Style.C_work}>
+          <Link to={`work/${work.slug}`}>
+            <img className={Style.C_work_img} src={`${baseUrl}/${work.cover}`} alt={`image of ${work.title}`}/>
+          </Link>
+        </div>
+      )
+    }
+  }
   
   return(
     <MainContainer paddingTop='8px' overflow="hidden">
@@ -127,11 +139,7 @@ export default function Home(): JSX.Element {
       <SpaceSection>
         <Carousel>
           {works.length > 0 && works.map(work => (
-            <div key={work.id} className={Style.C_work}>
-              <Link to={`work/${work.slug}`}>
-                <img src={`${baseUrl}/${work.cover}`} alt={`image of ${work.title}`} />
-              </Link>
-            </div>
+            renderWork(work)
           ))}
         </Carousel>
       </SpaceSection>
@@ -151,5 +159,3 @@ export default function Home(): JSX.Element {
     </MainContainer>
   )
 }
-
-// TODO - on API, to create the is_published property in the works

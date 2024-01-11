@@ -13,7 +13,7 @@ import toast from "react-hot-toast";
 import BackButton from "../../../components/backButton";
 import { useNavigate } from "react-router-dom";
 import ImagesWorkManager from "../../../components/imagesWorkManager";
-import SpaceSection from '../../../components/spaceSection';
+import InputCheckbox from "../../../components/inputCheckbox";
 
 interface ErrorProps {
   title?: string;
@@ -28,6 +28,9 @@ export default function NewWork(): JSX.Element {
   const [link, setLink] = useState('');
   const [cover, setCover] = useState<File | null>();
   const [coverUrl, setCoverUrl] = useState<string | undefined>('');
+  const [isPublished, setIsPublished] = useState<boolean>(true);
+  const [showInHome, setShowInHome] = useState<boolean>(false);
+
   const [titleError, setTitleError] = useState<string | undefined>('');
   const [linkError, setLinkError] = useState<string | undefined>('');
   const [coverError, setCoverError] = useState<string | undefined>();
@@ -66,6 +69,8 @@ export default function NewWork(): JSX.Element {
     setDescriptionError('');
     setLinkError('');
     setCoverError('');
+    setIsPublished(true);
+    setShowInHome(false);
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -86,6 +91,8 @@ export default function NewWork(): JSX.Element {
       description: formData.get('description'),
       link: formData.get('link'),
       cover: cover,
+      is_published: formData.get('is_published'),
+      show_in_home: formData.get('show_in_home'),
     }
 
     await api.post('/work/api/create/', data, config)
@@ -136,6 +143,22 @@ export default function NewWork(): JSX.Element {
           error={linkError}
         />
 
+        <div style={{ maxWidth: 'fit-content' }}>
+          <InputCheckbox
+            name='is_published'
+            value={isPublished}
+            displayLabelValue='publicado'
+            onClick={() => setIsPublished(isPublished ? false : true)}
+          />
+
+          <InputCheckbox
+            name='show_in_home'
+            value={showInHome}
+            displayLabelValue='está na home'
+            onClick={() => setShowInHome(showInHome ? false : true)}
+          />
+        </div>
+
         <label htmlFor="cover">cover</label>
         <div className={Style.C_work_c_cover}>
           <AiOutlineUpload 
@@ -167,9 +190,7 @@ export default function NewWork(): JSX.Element {
       </form>
 
       {workId && (
-        <SpaceSection>
           <ImagesWorkManager user={user} workId={workId} callbackFn={() => cleanFields()}/>
-        </SpaceSection>
       )}
 
     </MainContainer>

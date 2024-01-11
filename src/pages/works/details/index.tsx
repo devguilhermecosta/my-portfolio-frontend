@@ -6,6 +6,7 @@ import { WorkProps, ImageWorkProps } from '../../../interfaces/work';
 import MainContainer from '../../../components/mainContainer';
 import NotFound from '../../../components/notFound';
 import Input from '../../../components/input';
+import InputCheckbox from '../../../components/inputCheckbox';
 import TextArea from '../../../components/textarea';
 import Cover from '../../../components/cover';
 import Loading from '../../../components/loading';
@@ -35,6 +36,8 @@ export default function WorkDetail(): JSX.Element {
   const [link, setLink] = useState('');
   const [cover, setCover] = useState<File | null>(null);
   const [coverUrl, setCoverUrl] = useState<string | null>(null);
+  const [isPublished, setIsPublished] = useState<boolean>(false);
+  const [showInHome, setShowInHome] = useState<boolean>(false);
 
   const [titleControl, setTitleControl] = useState('');
 
@@ -50,6 +53,8 @@ export default function WorkDetail(): JSX.Element {
         setTitle(response.data.title);
         setDescription(response.data.description);
         setLink(response.data?.link);
+        setIsPublished(response.data?.is_published);
+        setShowInHome(response.data?.show_in_home);
         getImagesWork(response.data?.id)
       })
       .catch(() => setWork(undefined))
@@ -110,6 +115,8 @@ export default function WorkDetail(): JSX.Element {
     }
 
     const formData = new FormData();
+    addFieldToFormData(formData, 'is_published', JSON.stringify(isPublished));
+    addFieldToFormData(formData, 'show_in_home', JSON.stringify(showInHome));
     if (title !== titleControl) addFieldToFormData(formData, 'title', title, work?.title);
     addFieldToFormData(formData, 'description', description, work?.description);
     addFieldToFormData(formData, 'link', link, work?.link)
@@ -189,6 +196,22 @@ export default function WorkDetail(): JSX.Element {
             error={errorLink}
             onChange={e => setLink(e.target.value)}
           />
+
+          <div style={{ maxWidth: 'fit-content' }}>
+            <InputCheckbox
+              name='isPublished'
+              value={isPublished}
+              displayLabelValue='publicado'
+              onClick={() => setIsPublished(isPublished ? false : true)}
+            />
+
+            <InputCheckbox
+              name='showInHome'
+              value={showInHome}
+              displayLabelValue='está na home'
+              onClick={() => setShowInHome(showInHome ? false : true)}
+            />
+          </div>
 
           {work?.cover && (
             <div style={{
