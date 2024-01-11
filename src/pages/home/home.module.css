@@ -91,10 +91,10 @@
   margin-right: 15px;
 }
 
-.C_work img {
+.C_work_img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 @media screen and (min-width: 200px) {
