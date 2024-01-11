@@ -8,6 +8,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { baseUrl } from '../../../../utils/api';
 import WorkDetail from '..';
 import { imagesWorkList } from '../../../../utils/mocks/imagesWorkList';
+import { oneWorkMock } from '../../../../utils/mocks/worksList';
 
 const globalURL = global.URL.createObjectURL = vi.fn();
 
@@ -33,6 +34,15 @@ describe('<WorkDetail />', () => {
   });
 
   it('should render the work data', async () => {
+    server.use(
+      http.get(`${baseUrl}/work/api/:slug/`, () => {
+        return HttpResponse.json(oneWorkMock, { status: 200 })
+      }),
+      http.get(`/work/api/images/:id/list/`, () => {
+        return HttpResponse.json(imagesWorkList, { status: 200 })
+      })
+    );
+
     renderWorkDetail();
 
     await screen.findByDisplayValue('work title');
@@ -42,6 +52,15 @@ describe('<WorkDetail />', () => {
   });
 
   it('should navigate to works page on button click', async () => {
+    server.use(
+      http.get(`${baseUrl}/work/api/:slug/`, () => {
+        return HttpResponse.json(oneWorkMock, { status: 200 })
+      }),
+      http.get(`/work/api/images/:id/list/`, () => {
+        return HttpResponse.json(imagesWorkList, { status: 200 })
+      })
+    );
+
     const user = userEvent.setup();
     renderWorkDetail();
 
@@ -52,6 +71,15 @@ describe('<WorkDetail />', () => {
   });
 
   it('should change the field data', async () => {
+    server.use(
+      http.get(`${baseUrl}/work/api/:slug/`, () => {
+        return HttpResponse.json(oneWorkMock, { status: 200 })
+      }),
+      http.get(`/admin/dashboard/work/api/images/:id/list/`, () => {
+        return HttpResponse.json(imagesWorkList, { status: 200 })
+      })
+    );
+
     // new data to change input value
     const newData = {
       title: 'new title',
@@ -101,6 +129,9 @@ describe('<WorkDetail />', () => {
     server.use(
       http.patch(`${baseUrl}/work/api/:slug/`, () => {
         return new HttpResponse(null, { status: 400 })
+      }),
+      http.get(`/admin/dashboard/work/api/images/:id/list/`, () => {
+        return HttpResponse.json(imagesWorkList, { status: 200 })
       })
     )
 
@@ -124,6 +155,9 @@ describe('<WorkDetail />', () => {
           title: 'Campo obrigatório',
           description: 'Campo obrigatório',
         }, { status: 400 })
+      }),
+      http.get(`/admin/dashboard/work/api/images/:id/list/`, () => {
+        return HttpResponse.json(imagesWorkList, { status: 200 })
       })
     )
 
@@ -156,6 +190,9 @@ describe('<WorkDetail />', () => {
     server.use(
       http.patch(`${baseUrl}/work/api/:slug/`, () => {
         return new HttpResponse(null, { status: 204 })
+      }),
+      http.get(`/admin/dashboard/work/api/images/:id/list/`, () => {
+        return HttpResponse.json(imagesWorkList, { status: 200 })
       })
     )
 
@@ -175,6 +212,9 @@ describe('<WorkDetail />', () => {
     server.use(
       http.patch(`${baseUrl}/work/api/:slug/`, () => {
         return new HttpResponse(null, { status: 204 })
+      }),
+      http.get(`/admin/dashboard/work/api/images/:id/list/`, () => {
+        return HttpResponse.json(imagesWorkList, { status: 200 })
       })
     )
 
@@ -225,6 +265,9 @@ describe('<WorkDetail />', () => {
     server.use(
       http.get(`${baseUrl}/work/api/images/:id/list/`, () => {
         return HttpResponse.json(imagesWorkList, { status: 200 })
+      }),
+      http.get(`/admin/dashboard/work/api/images/:id/list/`, () => {
+        return HttpResponse.json(imagesWorkList, { status: 200 })
       })
     )
 
@@ -241,7 +284,10 @@ describe('<WorkDetail />', () => {
       http.get(`${baseUrl}/work/api/images/:id/list/`, () => {
         return HttpResponse.json(imagesWorkList, { status: 200 })
       }),
-      http.delete(`${baseUrl}/work/api/image/:id/`, () => {
+      http.get(`/admin/dashboard/work/api/images/:id/list/`, () => {
+        return HttpResponse.json(imagesWorkList, { status: 200 })
+      }),
+      http.delete(`/admin/dashboard/work/api/image/:id/`, () => {
         return new HttpResponse(null, { status: 204 })
       })
     )
@@ -268,7 +314,10 @@ describe('<WorkDetail />', () => {
       http.get(`${baseUrl}/work/api/images/:id/list/`, () => {
         return HttpResponse.json(imagesWorkList, { status: 200 })
       }),
-      http.delete(`${baseUrl}/work/api/image/:id/`, () => {
+      http.get(`/admin/dashboard/work/api/images/:id/list/`, () => {
+        return HttpResponse.json(imagesWorkList, { status: 200 })
+      }),
+      http.delete(`/admin/dashboard/work/api/image/:id/`, () => {
         return new HttpResponse(null, { status: 400 })
       })
     )
@@ -289,5 +338,3 @@ describe('<WorkDetail />', () => {
     expect(spy).toHaveBeenCalledWith('error on delete the image');
   })
 })
-
-//TODO - continuar a refatoração de testes a partir daqui

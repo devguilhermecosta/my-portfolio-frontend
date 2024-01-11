@@ -6,7 +6,6 @@ import NewWork from '..';
 import userEvent from '@testing-library/user-event';
 import { server } from '../../../../utils/mocks/node';
 import { http, HttpResponse } from 'msw';
-import { baseUrl } from '../../../../utils/api';
 import { act } from 'react-dom/test-utils';
 
 global.URL.createObjectURL = vi.fn();
@@ -33,7 +32,7 @@ describe('<NewWork >', () => {
   });
 
   it('should render the inputs with border red when error on post request', async () => {
-    server.use(http.post(`${baseUrl}/work/api/create/`, () => {
+    server.use(http.post(`/work/api/create/`, () => {
       return HttpResponse.json({
         title: 'Campo obrigatório',
         description: 'Campo obrigatório',
@@ -56,7 +55,7 @@ describe('<NewWork >', () => {
   });
 
   it('should not load the work image manager if an error occurs in the work creation request', async () => {
-    server.use(http.post(`${baseUrl}/work/api/create/`, async () => {
+    server.use(http.post(`/work/api/create/`, async () => {
       return HttpResponse.json({
         title: 'Campo obrigatório',
         link: 'Campo obrigatório',
@@ -79,7 +78,7 @@ describe('<NewWork >', () => {
   });
 
   it('should render the work images manager if the work is created', async () => {
-    server.use(http.post(`${baseUrl}/work/api/create/`, async () => {
+    server.use(http.post(`/work/api/create/`, async () => {
       return HttpResponse.json({
         id: 1,
         title: 'work title',
@@ -109,7 +108,7 @@ describe('<NewWork >', () => {
 
     /* mock the requests */
     server.use(
-      http.post(`${baseUrl}/work/api/create/`, async () => {
+      http.post(`/work/api/create/`, async () => {
       return HttpResponse.json({
         id: 1,
         title: 'work title',
@@ -117,7 +116,7 @@ describe('<NewWork >', () => {
         description: 'work description',
         }, { status: 201 })
       }),
-      http.post(`${baseUrl}/work/api/images/create/`, () => {
+      http.post(`/work/api/images/create/`, () => {
         return new HttpResponse(null, { status: 201 })
       })
     
